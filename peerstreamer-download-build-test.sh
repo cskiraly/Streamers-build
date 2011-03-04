@@ -21,7 +21,7 @@ make install
 cd ..
 
 #prepare GRAPES
-git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/GRAPES.git
+git clone http://halo.disi.unitn.it/~abeni/PublicGits/GRAPES.git
 cd GRAPES
 FFDIR=`pwd`/../ffmpeg make
 cd ..
