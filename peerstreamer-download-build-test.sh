@@ -21,13 +21,13 @@ make install
 cd ..
 
 #prepare GRAPES
-git clone http://www.disi.unitn.it/~kiraly/PublicGits/GRAPES.git
+git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/GRAPES.git
 cd GRAPES
 FFDIR=`pwd`/../ffmpeg make
 cd ..
 
 #prepare the Streamer
-git clone http://www.disi.unitn.it/~kiraly/SharedGits/Streamers.git
+git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/Streamers.git
 cd Streamers
 GRAPES=../GRAPES FFMPEG_DIR=../ffmpeg X264_DIR=../x264 make
 cd ..
