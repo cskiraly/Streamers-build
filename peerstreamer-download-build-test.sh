@@ -38,4 +38,5 @@ git clone http://www.disi.unitn.it/~kiraly/SharedGits/Streamers-test.git
 #run a test
 mkdir test
 cd test
-../Streamers-test/test.sh -e ../Streamers/streamer-grapes -N 0 -X 0 -v ~/video/big_buck_bunny_480p_600k.mpg -o "../ffmpeg/ffplay -" -O 1
+wget http://halo.disi.unitn.it/~cskiraly/video/test.ts
+../Streamers-test/test.sh -e ../Streamers/streamer-grapes -N 0 -X 0 -v test.ts -o "../ffmpeg/ffplay -" -O 1
