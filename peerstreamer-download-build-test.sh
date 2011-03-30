@@ -52,8 +52,8 @@ $BASEDIR/Streamers-test/test.sh -e $BASEDIR/Streamers/streamer-grapes -N 0 -X 0 
 PID=$!
 sleep 20
 kill $PID || { echo "1st Test failed!" && exit 1; }
-
 cd ..
+
 #NAPA-libs
 git clone http://halo.disi.unitn.it/~cskiraly/SharedGits/NAPA-BASELIBS.git
 cd NAPA-BASELIBS
@@ -72,5 +72,6 @@ $BASEDIR/Streamers-test/test.sh -e $BASEDIR/Streamers/streamer-ml-monl-grapes-st
 PID=$!
 sleep 20
 kill $PID || { echo "2nd Test failed!" && exit 1; }
+cd ..
 
 echo "Your executables are ready"
