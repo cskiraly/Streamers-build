@@ -49,3 +49,6 @@ mkdir test
 cd test
 wget http://halo.disi.unitn.it/~cskiraly/video/test.ts -N
 $BASEDIR/Streamers-test/test.sh -e $BASEDIR/Streamers/streamer-grapes -N 0 -X 0 -v test.ts -o "$THIRDPARTYLIBS/ffmpeg/ffplay -" -O 1 &
+PID=$!
+sleep 20
+kill $PID || { echo "1st Test failed!" && exit 1; }
