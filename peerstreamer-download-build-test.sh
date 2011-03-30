@@ -29,7 +29,7 @@ cd ..
 #cd .. #3RDPARTY-LIBS
 
 #prepare GRAPES
-git clone http://halo.disi.unitn.it/~abeni/PublicGits/GRAPES.git
+git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/GRAPES.git
 cd GRAPES
 FFDIR=$THIRDPARTYLIBS/ffmpeg make || { echo "Error compiling GRAPES" && exit 1; }
 cd ../..
