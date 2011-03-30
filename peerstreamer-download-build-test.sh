@@ -52,3 +52,25 @@ $BASEDIR/Streamers-test/test.sh -e $BASEDIR/Streamers/streamer-grapes -N 0 -X 0 
 PID=$!
 sleep 20
 kill $PID || { echo "1st Test failed!" && exit 1; }
+
+cd ..
+#NAPA-libs
+git clone http://halo.disi.unitn.it/~cskiraly/SharedGits/NAPA-BASELIBS.git
+cd NAPA-BASELIBS
+./build_all.sh -q
+cd ..
+
+#version with NAPA-libs
+cd Streamers
+GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 STATIC=2 NAPA=../NAPA-BASELIBS/ LIBEVENT_DIR=../NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1  make clean >/dev/null
+GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 STATIC=2 NAPA=../NAPA-BASELIBS/ LIBEVENT_DIR=../NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1  make || { echo "Error cimpiling the ML+MONL version of the Streamer" && exit 1; }
+cd ..
+
+#run a test
+cd test
+$BASEDIR/Streamers-test/test.sh -e $BASEDIR/Streamers/streamer-ml-monl-grapes-static -N 0 -X 0 -v test.ts -o "$THIRDPARTYLIBS/ffmpeg/ffplay -" -O 1 &
+PID=$!
+sleep 20
+kill $PID || { echo "2nd Test failed!" && exit 1; }
+
+echo "Your executables are ready"
