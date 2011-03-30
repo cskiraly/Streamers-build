@@ -22,7 +22,7 @@ git clone git://git.videolan.org/ffmpeg.git
 cd ffmpeg
 ./configure --enable-libx264 --enable-gpl --enable-pthreads --extra-cflags=-I$THIRDPARTYLIBS/x264-install/include --extra-ldflags=-L$THIRDPARTYLIBS/x264-install/lib --prefix=$THIRDPARTYLIBS/ffmpeg-install || { echo "Error configuring ffmpeg" && exit 1; }
 #in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
-make -j 2 || { echo "Error cimpiling ffmpeg" && exit 1; }
+make -j 2 || { echo "Error compiling ffmpeg" && exit 1; }
 make install || { echo "Error installing ffmpeg" && exit 1; }
 cd ..
 
@@ -31,14 +31,14 @@ cd ..
 #prepare GRAPES
 git clone http://halo.disi.unitn.it/~abeni/PublicGits/GRAPES.git
 cd GRAPES
-FFDIR=$THIRDPARTYLIBS/ffmpeg make || { echo "Error cimpiling GRAPES" && exit 1; }
+FFDIR=$THIRDPARTYLIBS/ffmpeg make || { echo "Error compiling GRAPES" && exit 1; }
 cd ../..
 
 #prepare the Streamer
 git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/Streamers.git
 cd Streamers
 GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 make clean
-GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 make || { echo "Error cimpiling the Streamer" && exit 1; }
+GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 make || { echo "Error compiling the Streamer" && exit 1; }
 cd ..
 
 #get test scripts
@@ -65,7 +65,7 @@ cd .. #$THIRDPARTYLIBS
 #version with NAPA-libs
 cd Streamers
 GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 STATIC=2 NAPA=$THIRDPARTYLIBS/NAPA-BASELIBS/ LIBEVENT_DIR=$THIRDPARTYLIBS/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1  make clean >/dev/null
-GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 STATIC=2 NAPA=$THIRDPARTYLIBS/NAPA-BASELIBS/ LIBEVENT_DIR=$THIRDPARTYLIBS/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1  make || { echo "Error cimpiling the ML+MONL version of the Streamer" && exit 1; }
+GRAPES=$THIRDPARTYLIBS/GRAPES FFMPEG_DIR=$THIRDPARTYLIBS/ffmpeg X264_DIR=$THIRDPARTYLIBS/x264 STATIC=2 NAPA=$THIRDPARTYLIBS/NAPA-BASELIBS/ LIBEVENT_DIR=$THIRDPARTYLIBS/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1  make || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 cd ..
 
 #run a test
