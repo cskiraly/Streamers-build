@@ -1,7 +1,7 @@
 BASEDIR = $(shell pwd)
 THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 
-.PHONY: $(THIRDPARTYLIBS) Streamers update
+.PHONY: $(THIRDPARTYLIBS) update
 
 all: Streamers/streamer-grapes
 ml: Streamers/streamer-ml-monl-grapes-static
