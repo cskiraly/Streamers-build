@@ -1,7 +1,7 @@
 BASEDIR = $(shell pwd)
 THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 
-.PHONY: $(THIRDPARTYLIBS) Streamers
+.PHONY: $(THIRDPARTYLIBS) Streamers update
 
 all: Streamers/streamer-grapes
 ml: Streamers/streamer-ml-monl-grapes-static
@@ -11,6 +11,10 @@ $(THIRDPARTYLIBS):
 
 submodules:
 	git submodule update --init
+
+update:
+	git pull
+	git submodule update
 
 Streamers: submodules
 
