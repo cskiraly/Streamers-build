@@ -1,7 +1,7 @@
 BASEDIR = $(shell pwd)
 THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 
-.PHONY: $(THIRDPARTYLIBS)
+.PHONY: $(THIRDPARTYLIBS) Streamers
 
 all: Streamers/streamer-grapes
 ml: Streamers/streamer-ml-monl-grapes-static
@@ -9,8 +9,10 @@ ml: Streamers/streamer-ml-monl-grapes-static
 $(THIRDPARTYLIBS):
 	$(MAKE) -C $(THIRDPARTYLIBS) || { echo "Error preparing third party libs" && exit 1; }
 
-Streamers:
-	git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/Streamers.git
+submodules:
+	git submodule update --init
+
+Streamers: submodules
 
 Streamers/streamer-grapes: Streamers $(THIRDPARTYLIBS)
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
