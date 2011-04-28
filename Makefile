@@ -9,14 +9,12 @@ ml: Streamers/streamer-ml-monl-grapes-static
 $(THIRDPARTYLIBS):
 	$(MAKE) -C $(THIRDPARTYLIBS) || { echo "Error preparing third party libs" && exit 1; }
 
-submodules:
-	git submodule update --init
-
 update:
 	git pull
 	git submodule update
 
-Streamers: submodules
+Streamers:
+	git submodule update --init -- $@
 
 Streamers/streamer-grapes: Streamers $(THIRDPARTYLIBS)
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
