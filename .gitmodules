@@ -1,3 +1,15 @@
 [submodule "Streamers"]
 	path = Streamers
 	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/Streamers.git
+[submodule "THIRDPARTY-LIBS/GRAPES"]
+	path = THIRDPARTY-LIBS/GRAPES
+	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/GRAPES.git
+[submodule "THIRDPARTY-LIBS/NAPA-BASELIBS"]
+	path = THIRDPARTY-LIBS/NAPA-BASELIBS
+	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/NAPA-BASELIBS.git
+[submodule "THIRDPARTY-LIBS/ffmpeg"]
+	path = THIRDPARTY-LIBS/ffmpeg
+	url = git://git.videolan.org/ffmpeg.git
+[submodule "THIRDPARTY-LIBS/x264"]
+	path = THIRDPARTY-LIBS/x264
+	url = git://git.videolan.org/x264.git
