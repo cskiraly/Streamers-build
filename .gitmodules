@@ -1,0 +1,3 @@
+[submodule "Streamers"]
+	path = Streamers
+	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/Streamers.git
