@@ -14,7 +14,7 @@ update:
 	git submodule update
 
 Streamers/.git:
-	git submodule update --init -- $(shell basedir $@)
+	git submodule update --init -- $(shell dirname $@)
 
 Streamers/streamer-grapes: Streamers/.git $(THIRDPARTYLIBS)
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
