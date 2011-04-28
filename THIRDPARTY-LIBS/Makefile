@@ -19,6 +19,7 @@ x264-install: x264-build
 
 ffmpeg: x264-install
 	git clone git://git.videolan.org/ffmpeg.git
+	cd ffmpeg && git checkout 2cae9809e2d59c7336fc2cccb97b82c7f764868a
 	cd ffmpeg && ./configure --enable-libx264 --enable-gpl --enable-pthreads --extra-cflags=-I$(THIRDPARTYLIBS)/x264-install/include --extra-ldflags=-L$(THIRDPARTYLIBS)/x264-install/lib --prefix=$(THIRDPARTYLIBS)/ffmpeg-install || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
