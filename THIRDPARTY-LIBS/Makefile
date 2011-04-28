@@ -42,4 +42,4 @@ NAPA-build: NAPA-BASELIBS
 	cd NAPA-BASELIBS && ./build_all.sh -q
 
 clean:
-	TODO
+	$(MAKE) -C GRAPES clean
