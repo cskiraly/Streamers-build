@@ -19,12 +19,14 @@ x264-build: x264/config.mak
 x264-install: x264-build
 	$(MAKE) -C x264 install  || { echo "Error installing x264" && exit 1; }
 
-ffmpeg/.git: x264-install
+ffmpeg/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+
+ffmpeg/config.mak: ffmpeg/.git x264-install
 	cd ffmpeg && ./configure --enable-libx264 --enable-gpl --enable-pthreads --extra-cflags=-I$(THIRDPARTYLIBS)/x264-install/include --extra-ldflags=-L$(THIRDPARTYLIBS)/x264-install/lib --prefix=$(THIRDPARTYLIBS)/ffmpeg-install || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
-ffmpeg-build: ffmpeg/.git
+ffmpeg-build: ffmpeg/config.mak
 	$(MAKE) -C ffmpeg || { echo "Error compiling ffmpeg" && exit 1; }
 
 ffmpeg-install: ffmpeg-build
