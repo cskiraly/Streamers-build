@@ -6,6 +6,7 @@ THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 all: Streamers/streamer-grapes
 ml: Streamers/streamer-ml-monl-grapes-static
 chunkstream: Streamers/streamer-chunkstream ChunkerPlayer/chunker_player/chunker_player
+ml-chunkstream: Streamers/streamer-ml-monl-chunkstream-static ChunkerPlayer/chunker_player/chunker_player
 
 $(THIRDPARTYLIBS):
 	$(MAKE) -C $(THIRDPARTYLIBS) || { echo "Error preparing third party libs" && exit 1; }
@@ -26,6 +27,9 @@ Streamers/streamer-ml-monl-grapes-static: Streamers/.git $(THIRDPARTYLIBS)
 
 Streamers/streamer-chunkstream: Streamers/.git $(THIRDPARTYLIBS)
 	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
+
+Streamers/streamer-ml-monl-chunkstream-static: Streamers/.git $(THIRDPARTYLIBS)
+	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=2 NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 
 ChunkerPlayer/.git:
 	git submodule update --init -- $(shell dirname $@)
