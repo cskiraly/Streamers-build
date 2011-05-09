@@ -6,3 +6,54 @@ Quick Start
 Run "make" and you will find the executable in "Streamers/streamer-grapes".
 
 See the built-in help ("Streamers/streamer-grapes -h") for usage examples and options.
+
+
+Building and running the simple version (GRAPES I/O)
+====================================================
+
+Compilation
+-----------
+Create executables by running:
+make
+
+Running the source
+------------------
+1, Start the source peer in one shell:
+Streamers/streamer-grapes -f ~/video/big_bunny_orig/big_buck_bunny_480p_stereo.avi -m 3
+or
+ffmpeg -i ~/video/myvideo.avi -f nut -vcodec mpeg4 -b 500000 -o /dev/stdout | Streamers/streamer-grapes -f /dev/stdin -m 3
+
+Running a peer
+--------------
+
+
+
+Building and running the complex version (chunkstream I/O)
+==========================================================
+
+The complex version contains a separate chunker and player application.
+
+Compilation
+-----------
+Create executables by running:
+make ml-chunkstream
+
+Running the source
+------------------
+1, Start the source peer in one shell:
+Streamers/streamer-ml-monl-chunkstream-static -f tcp://127.0.0.1:7777 -m 3
+
+2, In another shell, go to the Chunker's folder
+cd ChunkerPlayer/chunker_streamer
+
+3, Verify that the streamer is set up correctly:
+chunker.conf should contain:
+outsideWorldUrl = "tcp://127.0.0.1:7777"
+
+3, Start the chunker (after the source peer has been started!):
+./chunker_streamer -i ~/video/big_bunny_orig/big_buck_bunny_480p_stereo.avi -a 128000 -v 500000
+or
+./chunker_streamer -i /dev/stdin -l -a 128000 -v 500000
+
+Running a peer
+--------------
