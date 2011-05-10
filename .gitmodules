@@ -9,7 +9,7 @@
 	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/NAPA-BASELIBS.git
 [submodule "THIRDPARTY-LIBS/ffmpeg"]
 	path = THIRDPARTY-LIBS/ffmpeg
-	url = git://git.videolan.org/ffmpeg.git
+	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/ffmpeg.git
 [submodule "THIRDPARTY-LIBS/x264"]
 	path = THIRDPARTY-LIBS/x264
 	url = git://git.videolan.org/x264.git
