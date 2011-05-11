@@ -34,8 +34,8 @@ Streamers/streamer-ml-monl-chunkstream-static: Streamers/.git $(THIRDPARTYLIBS)
 ChunkerPlayer/.git:
 	git submodule update --init -- $(shell dirname $@)
 
-ChunkerPlayer/chunker_player/chunker_player: ChunkerPlayer/.git
-	cd ChunkerPlayer && ./build_ul.sh
+ChunkerPlayer/chunker_player/chunker_player: ChunkerPlayer/.git $(THIRDPARTYLIBS)
+	cd ChunkerPlayer && LOCAL_X264=$(THIRDPARTYLIBS)/x264-install LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install ./build_ul.sh
 
 prepare:
 	git submodule update --init
