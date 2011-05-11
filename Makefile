@@ -35,7 +35,7 @@ ChunkerPlayer/.git:
 	git submodule update --init -- $(shell dirname $@)
 
 ChunkerPlayer/chunker_player/chunker_player: ChunkerPlayer/.git $(THIRDPARTYLIBS)
-	cd ChunkerPlayer && LOCAL_X264=$(THIRDPARTYLIBS)/x264-install LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install ./build_ul.sh
+	cd ChunkerPlayer && LOCAL_X264=$(THIRDPARTYLIBS)/x264-install LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install LOCAL_LIBOGG=$(THIRDPARTYLIBS)/libogg-install LOCAL_LIBVORBIS=$(THIRDPARTYLIBS)/libvorbis-install LOCAL_MP3LAME=$(THIRDPARTYLIBS)/mp3lame-install ./build_ul.sh
 
 prepare:
 	git submodule update --init
