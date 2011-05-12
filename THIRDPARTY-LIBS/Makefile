@@ -11,7 +11,7 @@ x264/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 x264/config.mak: x264/.git
-	cd x264 && ./configure --prefix=$(THIRDPARTYLIBS)/x264-install/ || { echo "Error configuring x264" && exit 1; }
+	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ || { echo "Error configuring x264" && exit 1; }
 
 x264-build: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
