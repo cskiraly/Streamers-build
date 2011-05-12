@@ -43,3 +43,11 @@ prepare:
 clean:
 	$(MAKE) -C $(THIRDPARTYLIBS) clean
 	$(MAKE) -C Streamers clean
+
+pack: DIR = PeerStreamer-$(shell git describe --always --dirty)
+pack: ml-chunkstream
+	rm -rf $(DIR) $(DIR).tgz
+	mkdir $(DIR)
+	cp -r Streamers/streamer-ml-monl-chunkstream-static ChunkerPlayer/chunker_player/chunker_player ChunkerPlayer/chunker_player/icons ChunkerPlayer/chunker_player/channels.conf ChunkerPlayer/chunker_streamer/chunker_streamer ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
+	echo streamer-ml-monl-chunkstream-static>$(DIR)/peer_exec_name.conf
+	tar czf $(DIR).tgz $(DIR)
