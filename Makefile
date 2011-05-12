@@ -3,7 +3,9 @@ THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 
 .PHONY: $(THIRDPARTYLIBS) update
 
-all: Streamers/streamer-grapes
+all: pack
+
+simple: Streamers/streamer-grapes
 ml: Streamers/streamer-ml-monl-grapes-static
 chunkstream: Streamers/streamer-chunkstream ChunkerPlayer/chunker_player/chunker_player
 ml-chunkstream: Streamers/streamer-ml-monl-chunkstream-static ChunkerPlayer/chunker_player/chunker_player
