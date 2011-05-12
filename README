@@ -3,43 +3,86 @@ This is PeerStreamer, a P2P Media Streaming framework written in C.
 Quick Start
 ===========
 
-Run "make" and you will find the executable in "Streamers/streamer-grapes".
+Building
+--------
 
-See the built-in help ("Streamers/streamer-grapes -h") for usage examples and options.
+Run "make". A new folder will be created with the name PeerStreamer-<version>.
+You will find all the executables in this folder. PeerStreamer-<version>.tgz is
+also created to ease distribution.
+
+See the built-in help ("./streamer -h") for usage examples and options.
+
+
+Running a source
+----------------
+
+To run a source, the only thing you need is a media stream.
+
+If the stream is a video file, run is as e.g.
+./source.sh -f video.avi
+
+If the stream "live", coming from a device with its own timing,
+run it with the "-l" parameter as e.g.
+./source.sh -l -f /dev/dvb/adapter0/dvr0
+
+For more options, see the help
+./source.sh -h
+
+Create a channels.conf file, distribute it to the users, and enjoy.
+
+Running a peer
+--------------
+
+The only thing you need is the channel descriptor. Currently, the only way to
+provide this is to get the channels.conf file beonging to this channel.
+
+Running the player
+./chunker_player -q 50 -c <channelname> -p 8888
+
+
+Detailed instructions
+=====================
+
+PeerStreamer can be compiled in several ways, e.g. in a simple configuration that creates
+only one binary. It can also be compiled in more complex versions that include a streamer
+linked with a number of external libraries, as well as a custom made player application.
+
+Below we provide instructions for teo versions, the simplest case and the most complex one.
+The first one is useful for developers to understand the system. The second one is more
+useful as an end-user version.
 
 
 Building and running the simple version (GRAPES I/O)
-====================================================
+----------------------------------------------------
 
 Compilation
------------
+- - - - - -
 Create executables by running:
 make
 
 Running the source
-------------------
+- - - - - - - - -
 1, Start the source peer in one shell:
 Streamers/streamer-grapes -f ~/video/big_bunny_orig/big_buck_bunny_480p_stereo.avi -m 3
 or
 ffmpeg -i ~/video/myvideo.avi -f nut -vcodec mpeg4 -b 500000 -o /dev/stdout | Streamers/streamer-grapes -f /dev/stdin -m 3
 
 Running a peer
---------------
-
+- - - - - - -
 
 
 Building and running the complex version (chunkstream I/O)
-==========================================================
+----------------------------------------------------------
 
 The complex version contains a separate chunker and player application.
 
 Compilation
------------
+- - - - - -
 Create executables by running:
-make ml-chunkstream
+make pack
 
 Running the source
-------------------
+- - - - - - - - -
 1, Start the source peer in one shell:
 Streamers/streamer-ml-monl-chunkstream-static -f tcp://127.0.0.1:7777 -m 3
 
@@ -56,4 +99,4 @@ or
 ./chunker_streamer -i /dev/stdin -l -a 128000 -v 500000
 
 Running a peer
---------------
+- - - - - - -
