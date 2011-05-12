@@ -41,7 +41,7 @@ ffmpeg/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 ffmpeg/config.mak: ffmpeg/.git x264-install libvorbis-install libogg-install mp3lame-install
-	cd ffmpeg && ./configure --enable-libx264 --enable-libvorbis --enable-libmp3lame --enable-gpl --enable-pthreads --extra-cflags='-I$(THIRDPARTYLIBS)/x264-install/include -I$(THIRDPARTYLIBS)/libvorbis-install/include -I$(THIRDPARTYLIBS)/mp3lame-install/include' --extra-ldflags='-L$(THIRDPARTYLIBS)/x264-install/lib -L$(THIRDPARTYLIBS)/libvorbis-install/lib -L$(THIRDPARTYLIBS)/mp3lame-install/lib' --prefix=$(THIRDPARTYLIBS)/ffmpeg-install || { echo "Error configuring ffmpeg" && exit 1; }
+	cd ffmpeg && ./configure --enable-libx264 --enable-libvorbis --enable-libmp3lame --enable-gpl --enable-pthreads --extra-cflags='-I$(THIRDPARTYLIBS)/x264-install/include -I$(THIRDPARTYLIBS)/libvorbis-install/include -I$(THIRDPARTYLIBS)/libogg-install/include -I$(THIRDPARTYLIBS)/mp3lame-install/include' --extra-ldflags='-L$(THIRDPARTYLIBS)/x264-install/lib -L$(THIRDPARTYLIBS)/libvorbis-install/lib -L$(THIRDPARTYLIBS)/libogg-install/lib -L$(THIRDPARTYLIBS)/mp3lame-install/lib' --prefix=$(THIRDPARTYLIBS)/ffmpeg-install || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
 ffmpeg-build: ffmpeg/config.mak
