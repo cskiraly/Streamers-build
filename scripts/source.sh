@@ -46,9 +46,12 @@ done
 
 # start the chunker
 ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://127.0.0.1:$IPC_PORT $CHUNKER_XTRA  2>chunker_streamer.err 1>chunker_streamer.log &
+CPID=$!
 
 # start a streamer as well
 ./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:7777 -m $SOURCE_COPIES
+
+kill -9 $CPID
 
 
 
