@@ -48,7 +48,7 @@ clean:
 
 pack: DIR = PeerStreamer-$(shell git describe --always --dirty)
 pack: ml-chunkstream
-	rm -rf $(DIR) $(DIR).tgz
+	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
 	cp Streamers/streamer-ml-monl-chunkstream-static $(DIR)
 	cp -r ChunkerPlayer/chunker_player/chunker_player ChunkerPlayer/chunker_player/icons ChunkerPlayer/chunker_player/channels.conf $(DIR)
@@ -59,3 +59,5 @@ pack: ml-chunkstream
 	cp scripts/* $(DIR)
 	cp README $(DIR)
 	tar czf $(DIR).tgz $(DIR)
+	cd $(DIR) && strip streamer-ml-monl-chunkstream-static chunker_player chunker_streamer
+	tar czf $(DIR)-stripped.tgz $(DIR)
