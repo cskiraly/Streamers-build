@@ -49,7 +49,7 @@ done
 CPID=$!
 
 # start a streamer as well
-./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:7777 -m $SOURCE_COPIES
+./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES
 
 kill -9 $CPID
 
