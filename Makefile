@@ -46,7 +46,7 @@ clean:
 	$(MAKE) -C $(THIRDPARTYLIBS) clean
 	$(MAKE) -C Streamers clean
 
-pack: DIR = PeerStreamer-$(shell git describe --always --dirty)
+pack: DIR = PeerStreamer-$(shell git describe --always --dirty || git describe --always)
 pack: ml-chunkstream
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
