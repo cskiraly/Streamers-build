@@ -23,6 +23,7 @@ function usage () {
    echo "  -V codec: video encoder ($VIDEO_CODEC)"
    echo "  -A codec: audio encoder ($AUDIO_CODEC)"
    echo "  -l : the stream is a live source with its own timing"
+   echo "  -o : try to sync audio and video streams"
    echo "  -p port: UDP port used by the streamer ($PORT)"
    echo "  -m copies: copies of the stream sent out directly by the source ($SOURCE_COPIES)"
    echo "  -I ip: IPC ip ($IPC_IP)"
@@ -30,7 +31,7 @@ function usage () {
    exit $1
 }
 
-while getopts "f:v:a:V:A:lp:m:hI:P:" opt; do
+while getopts "f:v:a:V:A:lop:m:hI:P:" opt; do
    case $opt in
 
    f )  FILE=$OPTARG ;;
@@ -39,6 +40,7 @@ while getopts "f:v:a:V:A:lp:m:hI:P:" opt; do
    V )  VIDEO_CODEC=$OPTARG ;;
    A )  AUDIO_CODEC=$OPTARG ;;
    l )  CHUNKER_XTRA+=" -l" ;;
+   o )  CHUNKER_XTRA+=" -o" ;;
    p )  PORT=$OPTARG ;;
    m )  SOURCE_COPIES=$OPTARG ;;
    I )  IPC_IP=$OPTARG ;;
