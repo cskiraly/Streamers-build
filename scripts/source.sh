@@ -28,10 +28,12 @@ function usage () {
    echo "  -m copies: copies of the stream sent out directly by the source ($SOURCE_COPIES)"
    echo "  -I ip: IPC ip ($IPC_IP)"
    echo "  -P port: IPC port ($IPC_PORT)"
+   echo "  -c options: chunker extra option (e.g. -c '-s 640x480')"
+   echo "  -s options: source streamer extra options (e.g. -s '-b 100')"
    exit $1
 }
 
-while getopts "f:v:a:V:A:lop:m:hI:P:" opt; do
+while getopts "f:v:a:V:A:lop:m:I:P:c:s:h" opt; do
    case $opt in
 
    f )  FILE=$OPTARG ;;
@@ -45,6 +47,8 @@ while getopts "f:v:a:V:A:lop:m:hI:P:" opt; do
    m )  SOURCE_COPIES=$OPTARG ;;
    I )  IPC_IP=$OPTARG ;;
    P )  IPC_PORT=$OPTARG ;;
+   c )  CHUNKER_XTRA+=" "$OPTARG ;;
+   s )  STREAMER_XTRA+=" "$OPTARG ;;
    h )  usage 0 ;;
    \?)  usage 1 ;;
    esac
@@ -56,7 +60,7 @@ done
 CPID=$!
 
 # start a streamer as well
-./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES
+./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES $STREAMER_XTRA
 
 kill -9 $CPID
 
