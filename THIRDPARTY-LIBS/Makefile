@@ -3,6 +3,24 @@ THIRDPARTYLIBS = $(shell pwd)
 #GRAPES-LIBS = GRAPES/src/libgrapes.a
 #LIBS = $(GRAPES-LIBS) $(NAPA-LIBS)
 
+#configure FFMPEG
+CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
+CONFIG_FFMPEG += --enable-libx264
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
+CONFIG_FFMPEG += --enable-libvorbis
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libvorbis-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libvorbis-install/lib
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libogg-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libogg-install/lib
+CONFIG_FFMPEG += --enable-libmp3lame
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
+CONFIG_FFMPEG += --enable-gpl
+CONFIG_FFMPEG += --enable-pthreads
+CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
+CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
+
 .PHONY: GRAPES-build NAPA-build x264-build ffmpeg-build
 
 all: GRAPES-build NAPA-build
@@ -41,7 +59,7 @@ ffmpeg/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 ffmpeg/config.mak: ffmpeg/.git x264-install libvorbis-install libogg-install mp3lame-install
-	cd ffmpeg && ./configure --enable-libx264 --enable-libvorbis --enable-libmp3lame --enable-gpl --enable-pthreads --extra-cflags='-I$(THIRDPARTYLIBS)/x264-install/include -I$(THIRDPARTYLIBS)/libvorbis-install/include -I$(THIRDPARTYLIBS)/libogg-install/include -I$(THIRDPARTYLIBS)/mp3lame-install/include' --extra-ldflags='-L$(THIRDPARTYLIBS)/x264-install/lib -L$(THIRDPARTYLIBS)/libvorbis-install/lib -L$(THIRDPARTYLIBS)/libogg-install/lib -L$(THIRDPARTYLIBS)/mp3lame-install/lib' --prefix=$(THIRDPARTYLIBS)/ffmpeg-install || { echo "Error configuring ffmpeg" && exit 1; }
+	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
 ffmpeg-build: ffmpeg/config.mak
