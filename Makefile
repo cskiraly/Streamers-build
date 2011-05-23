@@ -51,12 +51,13 @@ pack: ml-chunkstream
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
 	cp Streamers/streamer-ml-monl-chunkstream-static $(DIR)
-	cp -r ChunkerPlayer/chunker_player/chunker_player ChunkerPlayer/chunker_player/icons ChunkerPlayer/chunker_player/channels.conf $(DIR)
+	cp -r ChunkerPlayer/chunker_player/chunker_player ChunkerPlayer/chunker_player/icons $(DIR)
 	cp ChunkerPlayer/chunker_player/stats_font.ttf ChunkerPlayer/chunker_player/mainfont.ttf ChunkerPlayer/chunker_player/napalogo_small.bmp $(DIR)
 	cp ChunkerPlayer/chunker_streamer/chunker_streamer ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
 	echo streamer-ml-monl-chunkstream-static > $(DIR)/peer_exec_name.conf
 	ln -s streamer-ml-monl-chunkstream-static $(DIR)/streamer
 	cp scripts/* $(DIR)
+	cp channels.conf $(DIR)
 	cp README $(DIR)
 	tar czf $(DIR).tgz $(DIR)
 	cd $(DIR) && strip streamer-ml-monl-chunkstream-static chunker_player chunker_streamer
