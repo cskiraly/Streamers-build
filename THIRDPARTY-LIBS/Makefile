@@ -21,7 +21,7 @@ CONFIG_FFMPEG += --enable-pthreads
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
 
-.PHONY: GRAPES-build NAPA-build x264-build ffmpeg-build
+.PHONY: GRAPES-build NAPA-build all
 
 all: GRAPES-build NAPA-build
 
@@ -31,11 +31,10 @@ x264/.git:
 x264/config.mak: x264/.git
 	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ || { echo "Error configuring x264" && exit 1; }
 
-x264-build: x264/config.mak
+x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
-
-x264-install: x264-build
 	$(MAKE) -C x264 install  || { echo "Error installing x264" && exit 1; }
+	touch x264-install
 
 libogg:
 	wget http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz && tar xzf libogg-1.2.2.tar.gz && mv libogg-1.2.2 libogg && rm libogg-1.2.2.tar.gz
@@ -62,16 +61,15 @@ ffmpeg/config.mak: ffmpeg/.git x264-install libvorbis-install libogg-install mp3
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
-ffmpeg-build: ffmpeg/config.mak
+ffmpeg-install: ffmpeg/config.mak
 	$(MAKE) -C ffmpeg || { echo "Error compiling ffmpeg" && exit 1; }
-
-ffmpeg-install: ffmpeg-build
 	$(MAKE) -C ffmpeg install || { echo "Error installing ffmpeg" && exit 1; }
+	touch ffmpeg-install
 
-GRAPES/.git: ffmpeg-install
+GRAPES/.git: 
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
-GRAPES-build: GRAPES/.git
+GRAPES-build: GRAPES/.git ffmpeg-install
 	FFDIR=$(THIRDPARTYLIBS)/ffmpeg $(MAKE) -C GRAPES || { echo "Error compiling GRAPES" && exit 1; }
 
 NAPA-BASELIBS/.git:
