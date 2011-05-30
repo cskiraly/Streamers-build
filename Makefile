@@ -56,7 +56,7 @@ pack: ml-chunkstream
 	cp ChunkerPlayer/chunker_streamer/chunker_streamer ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
 	echo streamer-ml-monl-chunkstream-static > $(DIR)/peer_exec_name.conf
 	ln -s streamer-ml-monl-chunkstream-static $(DIR)/streamer
-	cp scripts/* $(DIR)
+	cp scripts/source.sh $(DIR)
 	cp channels.conf $(DIR)
 	cp README $(DIR)
 	tar czf $(DIR).tgz $(DIR)
