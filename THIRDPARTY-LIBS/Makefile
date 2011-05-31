@@ -5,6 +5,11 @@ THIRDPARTYLIBS = $(shell pwd)
 
 #configure FFMPEG
 CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
+CONFIG_FFMPEG += --enable-gpl
+ifeq ($(HOSTARCH),mingw32)
+CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32msvc- --target-os=mingw32 --enable-memalign-hack --disable-pthreads
+else
+CONFIG_FFMPEG += --enable-pthreads
 CONFIG_FFMPEG += --enable-libx264
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
@@ -16,14 +21,9 @@ CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libogg-install/lib
 CONFIG_FFMPEG += --enable-libmp3lame
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
-CONFIG_FFMPEG += --enable-gpl
+endif
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
-ifeq ($(HOSTARCH),mingw32)
-CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32msvc- --target-os=mingw32 --enable-memalign-hack --disable-pthreads
-else
-CONFIG_FFMPEG += --enable-pthreads
-endif
 
 ifeq ($(HOSTARCH),mingw32)
 FLAGS_GRAPES += ARCH=win32
@@ -65,7 +65,10 @@ mp3lame-install: mp3lame
 ffmpeg/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
-ffmpeg/config.mak: ffmpeg/.git x264-install libvorbis-install libogg-install mp3lame-install
+ifneq ($(HOSTARCH),mingw32)
+ffmpeg/config.mak: x264-install libvorbis-install libogg-install mp3lame-install
+endif
+ffmpeg/config.mak: ffmpeg/.git
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
