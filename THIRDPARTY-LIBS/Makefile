@@ -25,6 +25,10 @@ else
 CONFIG_FFMPEG += --enable-pthreads
 endif
 
+ifeq ($(HOSTARCH),mingw32)
+FLAGS_GRAPES += ARCH=win32
+endif
+
 .PHONY: GRAPES-build NAPA-build all
 
 all: GRAPES-build NAPA-build
@@ -74,7 +78,7 @@ GRAPES/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 GRAPES-build: GRAPES/.git ffmpeg-install
-	FFDIR=$(THIRDPARTYLIBS)/ffmpeg $(MAKE) -C GRAPES || { echo "Error compiling GRAPES" && exit 1; }
+	$(FLAGS_GRAPES) FFDIR=$(THIRDPARTYLIBS)/ffmpeg $(MAKE) -C GRAPES || { echo "Error compiling GRAPES" && exit 1; }
 
 NAPA-BASELIBS/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
