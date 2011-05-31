@@ -17,9 +17,13 @@ CONFIG_FFMPEG += --enable-libmp3lame
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
 CONFIG_FFMPEG += --enable-gpl
-CONFIG_FFMPEG += --enable-pthreads
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
+ifeq ($(HOSTARCH),mingw32)
+CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32msvc- --target-os=mingw32 --enable-memalign-hack --disable-pthreads
+else
+CONFIG_FFMPEG += --enable-pthreads
+endif
 
 .PHONY: GRAPES-build NAPA-build all
 
