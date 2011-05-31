@@ -57,6 +57,7 @@ pack: ml-chunkstream
 	echo streamer-ml-monl-chunkstream-static > $(DIR)/peer_exec_name.conf
 	ln -s streamer-ml-monl-chunkstream-static $(DIR)/streamer
 	cp scripts/source.sh $(DIR)
+	cp scripts/player.sh $(DIR)
 	cp channels.conf $(DIR)
 	cp README $(DIR)
 	tar czf $(DIR).tgz $(DIR)
