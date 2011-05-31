@@ -1,6 +1,14 @@
 BASEDIR = $(shell pwd)
 THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 
+FLAGS_CHUNKER += LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install
+ifneq ($(HOSTARCH),mingw32)
+FLAGS_CHUNKER += LOCAL_X264=$(THIRDPARTYLIBS)/x264-install 
+FLAGS_CHUNKER += LOCAL_LIBOGG=$(THIRDPARTYLIBS)/libogg-install
+FLAGS_CHUNKER += LOCAL_LIBVORBIS=$(THIRDPARTYLIBS)/libvorbis-install
+FLAGS_CHUNKER += LOCAL_MP3LAME=$(THIRDPARTYLIBS)/mp3lame-install
+endif
+
 .PHONY: $(THIRDPARTYLIBS) update
 
 all: pack
@@ -37,7 +45,7 @@ ChunkerPlayer/.git:
 	git submodule update --init -- $(shell dirname $@)
 
 ChunkerPlayer/chunker_player/chunker_player: ChunkerPlayer/.git $(THIRDPARTYLIBS)
-	cd ChunkerPlayer && LOCAL_X264=$(THIRDPARTYLIBS)/x264-install LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install LOCAL_LIBOGG=$(THIRDPARTYLIBS)/libogg-install LOCAL_LIBVORBIS=$(THIRDPARTYLIBS)/libvorbis-install LOCAL_MP3LAME=$(THIRDPARTYLIBS)/mp3lame-install ./build_ul.sh
+	cd ChunkerPlayer && $(FLAGS_CHUNKER) ./build_ul.sh
 
 prepare:
 	git submodule update --init
