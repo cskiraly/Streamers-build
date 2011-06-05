@@ -1,6 +1,18 @@
 BASEDIR = $(shell pwd)
 THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
 
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+  # do something Linux-y
+  STATIC ?= 2
+endif
+ifeq ($(UNAME), Darwin)
+  # do something OSX-y
+  STATIC = 0
+  MAC_OS = 1
+endif
+STATIC ?= 2
+
 FLAGS_CHUNKER += LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install
 ifneq ($(HOSTARCH),mingw32)
 FLAGS_CHUNKER += LOCAL_X264=$(THIRDPARTYLIBS)/x264-install 
@@ -35,13 +47,13 @@ Streamers/streamer-grapes: Streamers/.git $(THIRDPARTYLIBS)
 
 #version with NAPA-libs
 Streamers/streamer-ml-monl-grapes-static$(EXE): Streamers/.git $(THIRDPARTYLIBS)
-	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=2 NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
+	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 
 Streamers/streamer-chunkstream$(EXE): Streamers/.git $(THIRDPARTYLIBS)
 	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
 
 Streamers/streamer-ml-monl-chunkstream-static$(EXE): Streamers/.git $(THIRDPARTYLIBS)
-	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=2 NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
+	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 
 ChunkerPlayer/.git:
 	git submodule update --init -- $(shell dirname $@)
