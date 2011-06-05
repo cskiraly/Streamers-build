@@ -29,6 +29,8 @@ ifeq ($(HOSTARCH),mingw32)
 FLAGS_GRAPES += ARCH=win32
 endif
 
+WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
+
 .PHONY: GRAPES-build NAPA-build all
 
 all: GRAPES-build NAPA-build
@@ -45,19 +47,19 @@ x264-install: x264/config.mak
 	touch x264-install
 
 libogg:
-	wget http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz && tar xzf libogg-1.2.2.tar.gz && mv libogg-1.2.2 libogg && rm libogg-1.2.2.tar.gz
+	$(WGET_OR_CURL) http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz && tar xzf libogg-1.2.2.tar.gz && mv libogg-1.2.2 libogg && rm libogg-1.2.2.tar.gz
 
 libogg-install: libogg
 	cd libogg && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libogg-install/ && make && make install
 
 libvorbis:
-	wget http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz && tar xzf libvorbis-1.3.2.tar.gz && mv libvorbis-1.3.2 libvorbis && rm libvorbis-1.3.2.tar.gz
+	$(WGET_OR_CURL) http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz && tar xzf libvorbis-1.3.2.tar.gz && mv libvorbis-1.3.2 libvorbis && rm libvorbis-1.3.2.tar.gz
 
 libvorbis-install: libvorbis libogg-install
 	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ && make && make install
 
 mp3lame:
-	wget http://sourceforge.net/projects/lame/files/lame/3.98.4/lame-3.98.4.tar.gz && tar xzf lame-3.98.4.tar.gz && rm -f lame-3.98.4.tar.gz && mv lame-3.98.4 mp3lame;
+	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/3.98.4/lame-3.98.4.tar.gz && tar xzf lame-3.98.4.tar.gz && rm -f lame-3.98.4.tar.gz && mv lame-3.98.4 mp3lame;
 
 mp3lame-install: mp3lame
 	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ ${HOSTARCH:+--host=$HOSTARCH} && make && make install
