@@ -5,13 +5,16 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
   # do something Linux-y
   STATIC ?= 2
+  XSTATIC = -static
 endif
 ifeq ($(UNAME), Darwin)
   # do something OSX-y
   STATIC = 0
+  XSTATIC =
   MAC_OS = 1
 endif
 STATIC ?= 2
+XSTATIC ?= -static
 
 FLAGS_CHUNKER += LOCAL_FFMPEG=$(THIRDPARTYLIBS)/ffmpeg-install
 ifneq ($(HOSTARCH),mingw32)
@@ -28,9 +31,10 @@ endif
 all: pack
 
 simple: Streamers/streamer-grapes$(EXE)
-ml: Streamers/streamer-ml-monl-grapes-static$(EXE)
+ml: Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE)
 chunkstream: Streamers/streamer-chunkstream$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
-ml-chunkstream: Streamers/streamer-ml-monl-chunkstream-static$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
+ml-chunkstream: STREAMER=Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
+ml-chunkstream: $(STREAMER) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 
 $(THIRDPARTYLIBS):
 	$(MAKE) -C $(THIRDPARTYLIBS) || { echo "Error preparing third party libs" && exit 1; }
@@ -52,13 +56,13 @@ Streamers/streamer-grapes: Streamers/.git $(THIRDPARTYLIBS)
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
 
 #version with NAPA-libs
-Streamers/streamer-ml-monl-grapes-static$(EXE): Streamers/.git $(THIRDPARTYLIBS)
+Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): Streamers/.git $(THIRDPARTYLIBS)
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 
 Streamers/streamer-chunkstream$(EXE): Streamers/.git $(THIRDPARTYLIBS)
 	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
 
-Streamers/streamer-ml-monl-chunkstream-static$(EXE): Streamers/.git $(THIRDPARTYLIBS)
+Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE): Streamers/.git $(THIRDPARTYLIBS)
 	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 
 ChunkerPlayer/.git:
@@ -78,12 +82,12 @@ pack: DIR = PeerStreamer-$(shell git describe --always --dirty || git describe -
 pack: ml-chunkstream
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
-	cp Streamers/streamer-ml-monl-chunkstream-static$(EXE) $(DIR)
+	cp Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)
 	cp -r ChunkerPlayer/chunker_player/chunker_player$(EXE) ChunkerPlayer/chunker_player/icons $(DIR)
 	cp ChunkerPlayer/chunker_player/stats_font.ttf ChunkerPlayer/chunker_player/mainfont.ttf ChunkerPlayer/chunker_player/napalogo_small.bmp $(DIR)
-	echo streamer-ml-monl-chunkstream-static$(EXE) > $(DIR)/peer_exec_name.conf
+	echo streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) > $(DIR)/peer_exec_name.conf
 ifneq ($(HOSTARCH),mingw32)
-	ln -s streamer-ml-monl-chunkstream-static$(EXE) $(DIR)/streamer
+	ln -s streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)/streamer
 	cp ChunkerPlayer/chunker_streamer/chunker_streamer ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
 	cp scripts/source.sh $(DIR)
 	cp scripts/player.sh $(DIR)
@@ -91,7 +95,7 @@ endif
 	cp channels.conf $(DIR)
 	cp README $(DIR)
 	tar czf $(DIR).tgz $(DIR)
-	cd $(DIR) && strip streamer-ml-monl-chunkstream-static$(EXE) chunker_player$(EXE)
+	cd $(DIR) && strip streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) chunker_player$(EXE)
 ifneq ($(HOSTARCH),mingw32)
 	cd $(DIR) && strip chunker_streamer$(EXE)
 endif
