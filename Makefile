@@ -39,6 +39,12 @@ update:
 	git pull
 	git submodule update
 
+forceupdate:
+	git stash
+	git pull
+	git submodule foreach git stash
+	git submodule update
+
 Streamers/.git:
 	git submodule update --init -- $(shell dirname $@)
 
