@@ -60,7 +60,7 @@ done
 CPID=$!
 
 # start a streamer as well
-./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES $STREAMER_XTRA
+./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA
 
 kill -9 $CPID
 
