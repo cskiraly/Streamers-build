@@ -33,8 +33,7 @@ all: pack
 simple: Streamers/streamer-grapes$(EXE)
 ml: Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE)
 chunkstream: Streamers/streamer-chunkstream$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
-ml-chunkstream: STREAMER=Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
-ml-chunkstream: $(STREAMER) ChunkerPlayer/chunker_player/chunker_player$(EXE)
+ml-chunkstream: Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 
 $(THIRDPARTYLIBS):
 	$(MAKE) -C $(THIRDPARTYLIBS) || { echo "Error preparing third party libs" && exit 1; }
