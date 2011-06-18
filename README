@@ -6,9 +6,11 @@ Quick Start
 Building
 --------
 
-Run "make". A new folder will be created with the name PeerStreamer-<version>.
-You will find all the executables in this folder. PeerStreamer-<version>.tgz is
-also created to ease distribution.
+Run "make". A new folder will be created with the name
+PeerStreamer-<version>. You will find all the executables in this
+folder. PeerStreamer-<version>.tgz  and
+PeerStreamer-<version>.tgz-stripped.tgz is also created to ease
+distribution of binaries.
 
 See the built-in help ("./streamer -h") for usage examples and options.
 
@@ -21,35 +23,42 @@ To run a source, the only thing you need is a media stream.
 If the stream is a video file, run is as e.g.
 ./source.sh -f video.avi
 
-If the stream "live", coming from a device with its own timing,
-run it with the "-l" parameter as e.g.
+If the stream is "live", coming from a device with its own timing, run
+it with the "-l" parameter as e.g.
 ./source.sh -l -f /dev/dvb/adapter0/dvr0
 
 For more options, see the help
 ./source.sh -h
 
-Create a channels.conf file, distribute it to the users, and enjoy.
+Create a channels.conf file, distribute it to the users, and enjoy. As
+an alternative, you can also send the channels.conf to peerstreamer.org
+for inclusion in the channel list.
 
 Running a peer
 --------------
 
-The only thing you need is the channel descriptor. Currently, the only way to
-provide this is to get the channels.conf file beonging to this channel.
+Start the player with
 
-Running the player
-./chunker_player -q 50 -c <channelname> -p 8888
+./player.sh
+
+You can also use your custom channels.conf. In this case, copy the
+channels.conf in this folder, and run the player as follows:
+
+./chunker_player
 
 
 Detailed instructions
 =====================
 
-PeerStreamer can be compiled in several ways, e.g. in a simple configuration that creates
-only one binary. It can also be compiled in more complex versions that include a streamer
-linked with a number of external libraries, as well as a custom made player application.
+PeerStreamer can be compiled in several ways, e.g. in a simple
+configuration that creates only one binary. It can also be compiled in
+more complex versions that include a streamer linked with a number of
+external libraries, as well as a custom made player application.
 
-Below we provide instructions for teo versions, the simplest case and the most complex one.
-The first one is useful for developers to understand the system. The second one is more
-useful as an end-user version.
+Below we provide instructions for two versions, the simplest case and
+the most complex one. The first one is useful for developers to
+understand the system. The second one is more useful as an end-user
+version.
 
 
 Building and running the simple version (GRAPES I/O)
@@ -58,7 +67,7 @@ Building and running the simple version (GRAPES I/O)
 Compilation
 - - - - - -
 Create executables by running:
-make
+make simple
 
 Running the source
 - - - - - - - - -
@@ -75,23 +84,26 @@ Building and running the complex version (chunkstream I/O)
 ----------------------------------------------------------
 
 The complex version contains a separate chunker and player application.
+It also integrates with a number of external libraries, providing
+additional functionalities and performance.
 
 Compilation
 - - - - - -
 Create executables by running:
-make pack
+make
 
 Running the source
 - - - - - - - - -
+The easiest way to start a source is to use the provided wrapper script:
+source.sh. See the Quick Start instructions for examples.
+
+If more control is needed, follow this procedure:
+
 1, Start the source peer in one shell:
 Streamers/streamer-ml-monl-chunkstream-static -f tcp://127.0.0.1:7777 -m 3
 
 2, In another shell, go to the Chunker's folder
 cd ChunkerPlayer/chunker_streamer
-
-3, Verify that the streamer is set up correctly:
-chunker.conf should contain:
-outsideWorldUrl = "tcp://127.0.0.1:7777"
 
 3, Start the chunker (after the source peer has been started!):
 ./chunker_streamer -i ~/video/big_bunny_orig/big_buck_bunny_480p_stereo.avi -a 128000 -v 500000
@@ -100,3 +112,14 @@ or
 
 Running a peer
 - - - - - - -
+The only think a peers needs to run is a channel list. This can either
+come from peerstreamer.org, or you can create and use your own.
+
+In the first case, just start the included wrapper script:
+./player.sh
+This will download the most recent channel list and start playing.
+
+You can also create your own channel list (see the provided example
+channels.conf), and distribute it with the player. In this case, start
+the player with the following command:
+./chunker_player
