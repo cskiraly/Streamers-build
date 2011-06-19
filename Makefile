@@ -1,5 +1,5 @@
-BASEDIR = $(shell pwd)
-THIRDPARTYLIBS = $(BASEDIR)/THIRDPARTY-LIBS
+BASEDIR := $(shell pwd)
+THIRDPARTYLIBS := $(BASEDIR)/THIRDPARTY-LIBS
 
 NOGIT := $(shell [ -d .git ] || echo 1)
 
