@@ -3,6 +3,8 @@ THIRDPARTYLIBS = $(shell pwd)
 #GRAPES-LIBS = GRAPES/src/libgrapes.a
 #LIBS = $(GRAPES-LIBS) $(NAPA-LIBS)
 
+NOGIT := $(shell [ -d ../.git ] || echo 1)
+
 #configure FFMPEG
 CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
 CONFIG_FFMPEG += --enable-gpl
@@ -35,10 +37,29 @@ WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
 
 all: GRAPES-build NAPA-build
 
+ifndef NOGIT
 x264/.git:
 	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 x264/config.mak: x264/.git
+
+ffmpeg/.git:
+	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+
+ffmpeg/config.mak: ffmpeg/.git
+
+GRAPES/.git:
+	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+
+GRAPES-build: GRAPES/.git
+
+NAPA-BASELIBS/.git:
+	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+
+NAPA-build: NAPA-BASELIBS/.git
+endif
+
+x264/config.mak:
 	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ || { echo "Error configuring x264" && exit 1; }
 
 x264-install: x264/config.mak
@@ -64,13 +85,10 @@ mp3lame:
 mp3lame-install: mp3lame
 	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ ${HOSTARCH:+--host=$HOSTARCH} && make && make install
 
-ffmpeg/.git:
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
-
 ifneq ($(HOSTARCH),mingw32)
 ffmpeg/config.mak: x264-install libvorbis-install libogg-install mp3lame-install
 endif
-ffmpeg/config.mak: ffmpeg/.git
+ffmpeg/config.mak:
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
 
@@ -79,16 +97,10 @@ ffmpeg-install: ffmpeg/config.mak
 	$(MAKE) -C ffmpeg install || { echo "Error installing ffmpeg" && exit 1; }
 	touch ffmpeg-install
 
-GRAPES/.git: 
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
-
-GRAPES-build: GRAPES/.git ffmpeg-install
+GRAPES-build: ffmpeg-install
 	$(FLAGS_GRAPES) FFDIR=$(THIRDPARTYLIBS)/ffmpeg $(MAKE) -C GRAPES || { echo "Error compiling GRAPES" && exit 1; }
 
-NAPA-BASELIBS/.git:
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
-
-NAPA-build: NAPA-BASELIBS/.git
+NAPA-build:
 	cd NAPA-BASELIBS && ./build_all.sh -q
 
 clean:
