@@ -29,6 +29,7 @@ CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
 
 ifeq ($(HOSTARCH),mingw32)
 FLAGS_GRAPES += ARCH=win32
+ALTO_OPTION = ALTO=0
 endif
 
 WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
@@ -101,7 +102,8 @@ GRAPES-build: ffmpeg-install
 	$(FLAGS_GRAPES) FFDIR=$(THIRDPARTYLIBS)/ffmpeg $(MAKE) -C GRAPES || { echo "Error compiling GRAPES" && exit 1; }
 
 NAPA-build:
-	cd NAPA-BASELIBS && ./build_all.sh -q
+	cd NAPA-BASELIBS && $(ALTO_OPTION) ./build_all.sh -q
 
 clean:
 	$(MAKE) -C GRAPES clean
+	cd NAPA-BASELIBS && ./clean_all.sh
