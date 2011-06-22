@@ -2,6 +2,7 @@ BASEDIR := $(shell pwd)
 THIRDPARTYLIBS := $(BASEDIR)/THIRDPARTY-LIBS
 
 NOGIT := $(shell [ -d .git ] || echo 1)
+DIR := PeerStreamer-$(shell [ -d .git ] && git describe --always --dirty || [ -d .git ] && git describe --always || [ -d .svn ] && svnversion || echo exported)
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
@@ -28,7 +29,7 @@ else
 EXE =.exe
 endif
 
-.PHONY: $(THIRDPARTYLIBS) update
+.PHONY: $(THIRDPARTYLIBS) update clean ml-chunkstream
 
 all: pack
 
@@ -95,8 +96,10 @@ clean:
 	$(MAKE) -C $(THIRDPARTYLIBS) clean
 	$(MAKE) -C Streamers clean
 
-pack: DIR := PeerStreamer-$(shell [ -d .git ] && git describe --always --dirty || [ -d .git ] && git describe --always || [ -d .svn ] && svnversion || echo exported)
-pack: ml-chunkstream
+
+pack:  $(DIR)-stripped.tgz
+
+$(DIR)-stripped.tgz:  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
 	cp Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)
