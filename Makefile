@@ -95,7 +95,7 @@ clean:
 	$(MAKE) -C $(THIRDPARTYLIBS) clean
 	$(MAKE) -C Streamers clean
 
-pack: DIR := PeerStreamer-$(shell git describe --always --dirty || git describe --always || svnversion || echo exported)
+pack: DIR := PeerStreamer-$(shell [ -d .git ] && git describe --always --dirty || [ -d .git ] && git describe --always || [ -d .svn ] && svnversion || echo exported)
 pack: ml-chunkstream
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
