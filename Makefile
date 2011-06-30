@@ -118,8 +118,10 @@ endif
 	cp README $(DIR)
 ifneq ($(HOSTARCH),mingw32)
 	tar czf $(DIR).tgz $(DIR)
-	cd $(DIR) && strip streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) chunker_player$(EXE)
 	cd $(DIR) && strip chunker_streamer$(EXE)
+endif
+	cd $(DIR) && strip streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) chunker_player$(EXE)
+ifneq ($(HOSTARCH),mingw32)
 	tar czf $(DIR)-stripped.tgz $(DIR)
 else
 	zip -r $(DIR).zip $(DIR)
