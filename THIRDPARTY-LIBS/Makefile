@@ -106,4 +106,4 @@ NAPA-build:
 
 clean:
 	$(MAKE) -C GRAPES clean
-	cd NAPA-BASELIBS && ./clean_all.sh
+	$(MAKE) -C NAPA-BASELIBS clean
