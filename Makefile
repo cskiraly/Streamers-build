@@ -103,7 +103,9 @@ $(DIR)-stripped.tgz:  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) Chu
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
 	cp Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)
-	cp -r ChunkerPlayer/chunker_player/chunker_player$(EXE) ChunkerPlayer/chunker_player/icons $(DIR)
+	cp ChunkerPlayer/chunker_player/chunker_player$(EXE) $(DIR)
+	mkdir $(DIR)/icons
+	cp ChunkerPlayer/chunker_player/icons/* $(DIR)/icons
 	cp ChunkerPlayer/chunker_player/stats_font.ttf ChunkerPlayer/chunker_player/mainfont.ttf ChunkerPlayer/chunker_player/napalogo_small.bmp $(DIR)
 	echo streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) > $(DIR)/peer_exec_name.conf
 ifneq ($(HOSTARCH),mingw32)
@@ -114,9 +116,11 @@ ifneq ($(HOSTARCH),mingw32)
 endif
 	cp channels.conf $(DIR)
 	cp README $(DIR)
+ifneq ($(HOSTARCH),mingw32)
 	tar czf $(DIR).tgz $(DIR)
 	cd $(DIR) && strip streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) chunker_player$(EXE)
-ifneq ($(HOSTARCH),mingw32)
 	cd $(DIR) && strip chunker_streamer$(EXE)
-endif
 	tar czf $(DIR)-stripped.tgz $(DIR)
+else
+	zip -r $(DIR).zip $(DIR)
+endif
