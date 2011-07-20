@@ -13,6 +13,9 @@ IPC_PORT=7777
 PORT=6666
 SOURCE_COPIES=3
 
+# Kill everything we've stared on exit (with trap).
+trap "ps -o pid= --ppid $$ | xargs kill 2>/dev/null" 0
+
 # Usage: set paramters in this script (after the usage function), then run it with the command line option below
 function usage () {
    echo "Usage: $0 [options]"
