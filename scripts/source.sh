@@ -33,10 +33,11 @@ function usage () {
    echo "  -P port: IPC port ($IPC_PORT)"
    echo "  -c options: chunker extra option (e.g. -c '-s 640x480')"
    echo "  -s options: source streamer extra options (e.g. -s '-b 100')"
+   echo "  -R : restart chunker if it dies for some reason (should not be needed with stable releases)"
    exit $1
 }
 
-while getopts "f:v:a:V:A:lop:m:I:P:c:s:h" opt; do
+while getopts "f:v:a:V:A:lop:m:I:P:c:s:Rh" opt; do
    case $opt in
 
    f )  FILE=$OPTARG ;;
@@ -52,21 +53,27 @@ while getopts "f:v:a:V:A:lop:m:I:P:c:s:h" opt; do
    P )  IPC_PORT=$OPTARG ;;
    c )  CHUNKER_XTRA+=" "$OPTARG ;;
    s )  STREAMER_XTRA+=" "$OPTARG ;;
+   R )  RESTART=1 ;;
    h )  usage 0 ;;
    \?)  usage 1 ;;
    esac
 done
 
+while [[ $RESTART || ! $CPID ]]; do
 
-# start the chunker
-./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  2>&1 1>chunker_streamer.log | tee chunker_streamer.err &
-CPID=$!
+  echo "starting chunker"
+  ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  2>&1 1>chunker_streamer.log | tee chunker_streamer.err &
+  CPID=$!
 
-# start a streamer as well
-./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA
+  echo "starting streamer"
+  ./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA &
+  SPID=$!
+
+  wait $CPID; kill $SPID
+  sleep 1
+
+done;
 
 kill -9 $CPID
-
-
 
 
