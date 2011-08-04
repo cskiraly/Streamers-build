@@ -8,6 +8,7 @@ NOGIT := $(shell [ -d ../.git ] || echo 1)
 #configure FFMPEG
 CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
 CONFIG_FFMPEG += --enable-gpl
+CONFIG_FFMPEG += --disable-doc #for less build dependecies and faster build
 ifeq ($(HOSTARCH),mingw32)
 CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32msvc- --target-os=mingw32 --enable-memalign-hack --disable-pthreads
 else
