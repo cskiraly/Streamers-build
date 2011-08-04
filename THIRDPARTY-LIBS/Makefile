@@ -4,7 +4,7 @@ THIRDPARTYLIBS = $(shell pwd)
 #LIBS = $(GRAPES-LIBS) $(NAPA-LIBS)
 
 NOGIT := $(shell [ -d ../.git ] || echo 1)
-GITREPOCHECK = .git
+GITREPOCHECK = .git/HEAD
 
 #configure FFMPEG
 CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
