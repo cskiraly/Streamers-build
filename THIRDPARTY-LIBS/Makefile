@@ -4,6 +4,7 @@ THIRDPARTYLIBS = $(shell pwd)
 #LIBS = $(GRAPES-LIBS) $(NAPA-LIBS)
 
 NOGIT := $(shell [ -d ../.git ] || echo 1)
+GITREPOCHECK = .git
 
 #configure FFMPEG
 CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
@@ -40,29 +41,17 @@ WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
 all: GRAPES-build NAPA-build
 
 ifndef NOGIT
-x264/.git:
-	cd .. && git submodule init $(shell dirname $(THIRDPARTYLIBS)/$@)
-	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
+x264/$(GITREPOCHECK) ffmpeg/$(GITREPOCHECK) GRAPES/$(GITREPOCHECK) NAPA-BASELIBS/$(GITREPOCHECK):
+	cd .. && git submodule init $(THIRDPARTYLIBS)/$(@:/$(GITREPOCHECK)=)
+	cd .. && git submodule update $(THIRDPARTYLIBS)/$(@:/$(GITREPOCHECK)=)
 
-x264/config.mak: x264/.git
+x264/config.mak: x264/$(GITREPOCHECK)
 
-ffmpeg/.git:
-	cd .. && git submodule init $(shell dirname $(THIRDPARTYLIBS)/$@)
-	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
+ffmpeg/config.mak: ffmpeg/$(GITREPOCHECK)
 
-ffmpeg/config.mak: ffmpeg/.git
+GRAPES-build: GRAPES/$(GITREPOCHECK)
 
-GRAPES/.git:
-	cd .. && git submodule $(shell dirname $(THIRDPARTYLIBS)/$@)
-	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
-
-GRAPES-build: GRAPES/.git
-
-NAPA-BASELIBS/.git:
-	cd .. && git submodule init $(shell dirname $(THIRDPARTYLIBS)/$@)
-	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
-
-NAPA-build: NAPA-BASELIBS/.git
+NAPA-build: NAPA-BASELIBS/$(GITREPOCHECK)
 endif
 
 x264/config.mak:
