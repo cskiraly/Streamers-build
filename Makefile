@@ -2,7 +2,7 @@ BASEDIR := $(shell pwd)
 THIRDPARTYLIBS := $(BASEDIR)/THIRDPARTY-LIBS
 
 NOGIT := $(shell [ -d .git ] || echo 1)
-REV := $(shell ( [ -d .git ] && git describe --tags --always --dirty ) || ( [ -d .git ] && git describe --tags --always ) || ( [ -d .git ] && git describe --tags ) || ( [ -d .svn ] && svnversion ) || echo exported)
+REV := $(shell ( [ -d .git ] && git describe --tags --always --dirty 2>/dev/null ) || ( [ -d .git ] && git describe --tags --always 2>/dev/null ) || ( [ -d .git ] && git describe --tags ) || ( [ -d .svn ] && svnversion ) || echo exported)
 DIR := PeerStreamer-$(subst PeerStreamer-,,$(REV))
 
 UNAME := $(shell uname)
