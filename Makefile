@@ -54,7 +54,8 @@ forceupdate:
 	git submodule update
 
 Streamers/.git:
-	git submodule update --init -- $(shell dirname $@)
+	git submodule init -- $(shell dirname $@)
+	git submodule update -- $(shell dirname $@)
 
 Streamers/streamer-grapes: Streamers/.git
 Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): Streamers/.git
@@ -62,7 +63,8 @@ Streamers/streamer-chunkstream$(EXE): Streamers/.git
 Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE): Streamers/.git
 
 ChunkerPlayer/.git:
-	git submodule update --init -- $(shell dirname $@)
+	git submodule init -- $(shell dirname $@)
+	git submodule update -- $(shell dirname $@)
 
 ChunkerPlayer/chunker_player/chunker_player$(EXE): ChunkerPlayer/.git
 endif
@@ -85,7 +87,8 @@ ChunkerPlayer/chunker_player/chunker_player$(EXE): $(THIRDPARTYLIBS)
 
 prepare:
 ifndef NOGIT
-	git submodule update --init
+	git submodule init
+	git submodule update
 else
 	git clone http://halo.disi.unitn.it/~cskiraly/PublicGits/ffmpeg.git THIRDPARTY-LIBS/ffmpeg
 	cd THIRDPARTY-LIBS/ffmpeg && git checkout -b streamer 210091b0e31832342322b8461bd053a0314e63bc

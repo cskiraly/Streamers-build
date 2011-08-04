@@ -41,22 +41,26 @@ all: GRAPES-build NAPA-build
 
 ifndef NOGIT
 x264/.git:
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 x264/config.mak: x264/.git
 
 ffmpeg/.git:
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 ffmpeg/config.mak: ffmpeg/.git
 
 GRAPES/.git:
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 GRAPES-build: GRAPES/.git
 
 NAPA-BASELIBS/.git:
-	cd .. && git submodule update --init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule init $(shell dirname $(THIRDPARTYLIBS)/$@)
+	cd .. && git submodule update $(shell dirname $(THIRDPARTYLIBS)/$@)
 
 NAPA-build: NAPA-BASELIBS/.git
 endif
