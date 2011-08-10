@@ -101,3 +101,17 @@ NAPA-build:
 clean:
 	$(MAKE) -C GRAPES clean
 	$(MAKE) -C NAPA-BASELIBS clean
+
+distclean:
+	[ ! -d GRAPES ] || $(MAKE) -C GRAPES clean
+	[ ! -d NAPA-BASELIBS ] || $(MAKE) -C NAPA-BASELIBS clean
+	rm -rf libx264-install
+	[ ! -d x264 ] || $(MAKE) -C x264 distclean || true
+	rm -rf ffmpeg-install
+	[ ! -d ffmpeg ] || $(MAKE) -C ffmpeg distclean || true
+	rm -rf mp3lame-install
+	[ ! -d mp3lame ] || $(MAKE) -C mp3lame distclean || true
+	rm -rf libvorbis-install
+	[ ! -d libvorbis ] || $(MAKE) -C libvorbis distclean || true
+	rm -rf libogg-install
+	[ ! -d libogg ] || $(MAKE) -C libogg distclean || true

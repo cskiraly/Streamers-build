@@ -103,6 +103,13 @@ clean:
 	$(MAKE) -C ChunkerPlayer/chunk_transcoding clean
 	$(MAKE) -C ChunkerPlayer/chunker_streamer clean
 
+distclean:
+	$(MAKE) -C $(THIRDPARTYLIBS) distclean
+	$(MAKE) -C Streamers clean
+	$(MAKE) -C ChunkerPlayer/chunker_player clean
+	$(MAKE) -C ChunkerPlayer/chunk_transcoding clean
+	$(MAKE) -C ChunkerPlayer/chunker_streamer clean
+
 pack:  $(DIR)-stripped.tgz
 
 $(DIR)-stripped.tgz:  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
