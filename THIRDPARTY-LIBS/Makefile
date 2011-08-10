@@ -21,11 +21,15 @@ CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
 CONFIG_FFMPEG += --enable-libvorbis
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libvorbis-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libvorbis-install/lib
+CONFIG_FFMPEG_LDLIBS += -lvorbis
+CONFIG_FFMPEG_LDLIBS += -lvorbisenc
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libogg-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libogg-install/lib
+CONFIG_FFMPEG_LDLIBS += -logg
 CONFIG_FFMPEG += --enable-libmp3lame
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
+CONFIG_FFMPEG_LDLIBS += -lmp3lame
 endif
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
@@ -87,6 +91,9 @@ endif
 ffmpeg/config.mak:
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
+	echo $(CONFIG_FFMPEG_CFLAGS) >ffmpeg.cflags
+	echo $(CONFIG_FFMPEG_LDFLAGS) >ffmpeg.ldflags
+	echo $(CONFIG_FFMPEG_LDLIBS) >ffmpeg.ldlibs
 
 ffmpeg-install: ffmpeg/config.mak
 	$(MAKE) -C ffmpeg || { echo "Error compiling ffmpeg" && exit 1; }
@@ -109,6 +116,7 @@ distclean:
 	rm -rf libx264-install
 	[ ! -d x264 ] || $(MAKE) -C x264 distclean || true
 	rm -rf ffmpeg-install
+	rm -rf ffmpeg.{ldflags,cflags,ldlibs}
 	[ ! -d ffmpeg ] || $(MAKE) -C ffmpeg distclean || true
 	rm -rf mp3lame-install
 	[ ! -d mp3lame ] || $(MAKE) -C mp3lame distclean || true

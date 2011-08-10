@@ -70,10 +70,12 @@ ChunkerPlayer/chunker_player/chunker_player$(EXE): ChunkerPlayer/.git
 endif
 
 Streamers/streamer-grapes: $(THIRDPARTYLIBS)
+	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)ffmpeg.ldlibs` \
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
 
 #version with NAPA-libs
 Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
+	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs` \
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
 
 Streamers/streamer-chunkstream$(EXE): $(THIRDPARTYLIBS)
