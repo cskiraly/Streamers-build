@@ -8,6 +8,7 @@ GITREPOCHECK = .git/HEAD
 
 #configure FFMPEG
 CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg version in case of -bf > 0
+CONFIG_FFMPEG += --disable-vaapi #there seems to be no static version of vaapi, so it creates problems in distributed binaries
 CONFIG_FFMPEG += --enable-gpl
 CONFIG_FFMPEG += --disable-doc #for less build dependecies and faster build
 ifeq ($(HOSTARCH),mingw32)
