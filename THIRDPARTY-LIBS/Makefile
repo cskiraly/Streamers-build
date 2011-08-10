@@ -59,7 +59,7 @@ x264/config.mak:
 
 x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
-	$(MAKE) -C x264 install  || { echo "Error installing x264" && exit 1; }
+	$(MAKE) -C x264 install-lib-static  || { echo "Error installing x264" && exit 1; }
 	touch x264-install
 
 libogg:
