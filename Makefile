@@ -32,7 +32,7 @@ endif
 
 .PHONY: $(THIRDPARTYLIBS) update clean ml-chunkstream $(DIR)
 
-all: pack
+all: $(DIR)
 
 simple: Streamers/streamer-grapes$(EXE)
 ml: Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE)
@@ -69,6 +69,7 @@ ChunkerPlayer/.git:
 ChunkerPlayer/chunker_player/chunker_player$(EXE): ChunkerPlayer/.git
 endif
 
+#.PHONY: Streamers/streamer-grapes Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE) Streamers/streamer-chunkstream$(EXE) Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
 Streamers/streamer-grapes: $(THIRDPARTYLIBS)
 	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)ffmpeg.ldlibs` \
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
