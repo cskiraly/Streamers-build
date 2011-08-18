@@ -8,12 +8,12 @@ Building
 
 Run "make". A new folder will be created with the name
 PeerStreamer-<version>. You will find all the executables in this
-folder. PeerStreamer-<version>.tgz  and
-PeerStreamer-<version>.tgz-stripped.tgz is also created to ease
-distribution of binaries.
+folder.
+
+If you want to distribute binaries, you can run "make pack" to create
+PeerStreamer-<version>.tgz and PeerStreamer-<version>-stripped.tgz.
 
 See the built-in help ("./streamer -h") for usage examples and options.
-
 
 Running a source
 ----------------
