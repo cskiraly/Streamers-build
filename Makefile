@@ -30,7 +30,7 @@ else
 EXE =.exe
 endif
 
-.PHONY: $(THIRDPARTYLIBS) update clean ml-chunkstream
+.PHONY: $(THIRDPARTYLIBS) update clean ml-chunkstream $(DIR)
 
 all: pack
 
@@ -114,7 +114,7 @@ distclean:
 
 pack:  $(DIR)-stripped.tgz
 
-$(DIR)-stripped.tgz:  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
+$(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
 	cp Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)
@@ -131,8 +131,12 @@ ifneq ($(HOSTARCH),mingw32)
 endif
 	cp channels.conf $(DIR)
 	cp README $(DIR)
-ifneq ($(HOSTARCH),mingw32)
+
+$(DIR).tgz: $(DIR)
 	tar czf $(DIR).tgz $(DIR)
+
+$(DIR)-stripped.tgz: $(DIR).tgz
+ifneq ($(HOSTARCH),mingw32)
 	cd $(DIR) && strip chunker_streamer$(EXE)
 endif
 	cd $(DIR) && strip streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) chunker_player$(EXE)
