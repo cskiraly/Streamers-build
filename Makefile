@@ -71,7 +71,7 @@ endif
 
 #.PHONY: Streamers/streamer-grapes Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE) Streamers/streamer-chunkstream$(EXE) Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
 Streamers/streamer-grapes: $(THIRDPARTYLIBS)
-	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)ffmpeg.ldlibs` \
+	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs` \
 	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
 
 #version with NAPA-libs
