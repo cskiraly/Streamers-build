@@ -8,6 +8,10 @@ function bashkilltrap()
 }
 trap bashkilltrap 0
 
+# some magic to make the installed version find resource files
+WDIR=`readlink -f $0 | xargs dirname`
+cd $WDIR
+
 mkdir -p ~/.peerstreamer
 
 ./chunker_player $@
