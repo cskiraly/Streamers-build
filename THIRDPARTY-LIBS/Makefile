@@ -1,3 +1,5 @@
+UNAME := $(shell uname)
+
 THIRDPARTYLIBS = $(shell pwd)
 #NAPA-LIBS = NAPA-BASELIBS/monl/libmon.a NAPA-BASELIBS/ml/libml.a
 #GRAPES-LIBS = GRAPES/src/libgrapes.a
@@ -14,6 +16,10 @@ CONFIG_FFMPEG += --disable-doc #for less build dependecies and faster build
 ifeq ($(HOSTARCH),mingw32)
 CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32msvc- --target-os=mingw32 --enable-memalign-hack --disable-pthreads
 else
+ifeq ($(UNAME), Darwin)
+CONFIG_FFMPEG += --disable-avfilter # current libav fails to build on OSX Lion
+endif
+
 CONFIG_FFMPEG += --enable-pthreads
 CONFIG_FFMPEG += --enable-libx264
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
