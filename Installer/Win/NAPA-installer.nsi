@@ -1,12 +1,12 @@
 !include MUI2.nsh
 
 
-Name "Napa-Wine"
-OutFile "WineStreamerInstaller1.0.exe"
+Name "PeerStreamer"
+OutFile "PeerStreamerInstaller.exe"
 
 ;Default installation folder
-InstallDir "$PROGRAMFILES\NAPA-WINE"
-InstallDirRegKey HKLM "Software\NAPA-WINE" ""
+InstallDir "$PROGRAMFILES\PeerStreamer"
+InstallDirRegKey HKLM "Software\PeerStreamer" ""
 
 ;Request application privileges for Windows Vista
 RequestExecutionLevel user
@@ -27,14 +27,13 @@ FunctionEnd
 
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "WineStreamerLicense.rtf"
 !insertmacro MUI_PAGE_DIRECTORY
 Var StartMenuFolder
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\NAPA-WINE" 
-!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "NAPA-WINE"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\PeerStreamer"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "PeerStreamer"
 !insertmacro MUI_PAGE_STARTMENU "Application" $StartMenuFolder
 
 !insertmacro MUI_PAGE_INSTFILES
@@ -65,7 +64,7 @@ section
 setOutPath $INSTDIR
  
 # specify file to go in output path
-File /r WineStreamer\*.*
+File /r ..\..\PeerStreamer\*.*
 
  
 # define uninstaller name
@@ -75,14 +74,14 @@ writeUninstaller $INSTDIR\uninstaller.exe
     
 ;Create shortcuts
 CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-CreateShortCut "$SMPROGRAMS\$StartMenuFolder\WineStreamer.lnk" "$INSTDIR\runme.bat"
+CreateShortCut "$SMPROGRAMS\$StartMenuFolder\PeerStreamer.lnk" "$INSTDIR\chunker_player.exe"
 CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
   
 !insertmacro MUI_STARTMENU_WRITE_END
 
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\WineStreamer" \
-                 "DisplayName" "NAPA-WINE WineStreamer -- P2P video streaming client"
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\WineStreamer" \
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PeerStreamer" \
+                 "DisplayName" "PeerStreamer -- P2P video streaming client"
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PeerStreamer" \
                  "UninstallString" "$\"$INSTDIR\uninstaller.exe$\""
  
 # default section end
@@ -95,7 +94,7 @@ section "Uninstall"
 # Always delete uninstaller first
 delete $INSTDIR\uninstaller.exe
 
-DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\WineStreamer"
+DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PeerStreamer"
 
  
 # now delete installed files
@@ -103,7 +102,7 @@ RMDir /r "$INSTDIR"
 
 !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
 
-Delete "$SMPROGRAMS\$StartMenuFolder\WineStreamer.lnk"
+Delete "$SMPROGRAMS\$StartMenuFolder\PeerStreamer.lnk"
 Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
 RMDir "$SMPROGRAMS\$StartMenuFolder"
  
