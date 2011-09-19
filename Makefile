@@ -146,3 +146,11 @@ ifneq ($(HOSTARCH),mingw32)
 else
 	zip -r $(DIR).zip $(DIR)
 endif
+
+ifeq ($(HOSTARCH),mingw32)
+installer-win: $(DIR)
+	ln -s $(DIR) PeerStreamer
+	PEERSTREAMER_VERSION=$(REV) makensis Installer/Win/NAPA-installer.nsi
+	rm PeerStreamer
+	mv Installer/Win/PeerStreamerInstaller*.exe .
+endif
