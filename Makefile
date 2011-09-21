@@ -71,19 +71,37 @@ endif
 
 #.PHONY: Streamers/streamer-grapes Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE) Streamers/streamer-chunkstream$(EXE) Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
 Streamers/streamer-grapes: $(THIRDPARTYLIBS)
-	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs` \
-	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
+	cd Streamers && ./configure \
+	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-static=$(STATIC)
+	$(MAKE) -C Streamers
 
 #version with NAPA-libs
 Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
-	LDFLAGS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` LDLIBS=`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs` \
-	GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
+	cd Streamers && ./configure \
+	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
+	--with-ml --with-monl \
+	--with-static=$(STATIC)
+	$(MAKE) -C Streamers
 
 Streamers/streamer-chunkstream$(EXE): $(THIRDPARTYLIBS)
-	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 $(MAKE) -C Streamers  || { echo "Error compiling the Streamer" && exit 1; }
+	cd Streamers && ./configure \
+	--with-io=chunkstream \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-static=$(STATIC)
+	$(MAKE) -C Streamers
 
 Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
-	IO=chunkstream GRAPES=$(THIRDPARTYLIBS)/GRAPES FFMPEG_DIR=$(THIRDPARTYLIBS)/ffmpeg X264_DIR=$(THIRDPARTYLIBS)/x264 STATIC=$(STATIC) NAPA=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ LIBEVENT_DIR=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent ML=1 MONL=1 $(MAKE) -C Streamers || { echo "Error compiling the ML+MONL version of the Streamer" && exit 1; }
+	cd Streamers && ./configure \
+	--with-io=chunkstream \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
+	--with-ml --with-monl \
+	--with-static=$(STATIC)
+	$(MAKE) -C Streamers
 
 ChunkerPlayer/chunker_player/chunker_player$(EXE): $(THIRDPARTYLIBS)
 	cd ChunkerPlayer && $(FLAGS_CHUNKER) ./build_ul.sh
