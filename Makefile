@@ -154,3 +154,8 @@ installer-win: $(DIR)
 	rm PeerStreamer
 	mv Installer/Win/PeerStreamerInstaller*.exe .
 endif
+
+ifdef MAC_OS
+installer-OSX: $(DIR)
+	cd Installer/OSX/ && tar zfx OSX_template.tgz && ./makeApp.sh $(DIR) && rm -rf napa-template.app && make && mv PeerStreamer-1.0.1.dmg ../../
+endif
