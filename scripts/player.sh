@@ -14,4 +14,4 @@ cd $WDIR
 
 mkdir -p ~/.peerstreamer
 
-./chunker_player $@
+./chunker_player $@ >~/.peerstreamer/peerstreamer.log 2>&1
