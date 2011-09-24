@@ -134,7 +134,8 @@ distclean:
 pack:  $(DIR)-stripped.tgz
 
 install: $(DIR)
-	mv $(DIR) /opt/peerstreamer
+	mkdir -p /opt/peerstreamer
+	cp -r $(DIR)/* /opt/peerstreamer
 	ln -f -s /opt/peerstreamer/player.sh /usr/local/bin/peerstreamer
 
 uninstall:
