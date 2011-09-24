@@ -1,0 +1,9 @@
+PeerStreamer: Live peer-to-peer streaming application (P2P-TV)
+
+PeerStreamer is an open source P2P Media Streaming framework written in C,
+developed as part of the NAPA-WINE European research project. It includes a
+streaming engine for the efficient distribution of media streams, a source
+application for the creation of channels and a player applications to visualize
+the streams.
+
+http://peerstreamer.org
