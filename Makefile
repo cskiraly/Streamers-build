@@ -133,6 +133,18 @@ distclean:
 
 pack:  $(DIR)-stripped.tgz
 
+install: $(DIR)
+	mv $(DIR) /opt/peerstreamer
+	ln -f -s /opt/peerstreamer/player.sh /usr/local/bin/peerstreamer
+
+uninstall:
+	rm -rf /opt/peerstreamer
+	rm -f /usr/local/bin/peerstreamer
+
+debian:
+	checkinstall -D --install=no --pkgname="peerstreamer" --pkgversion="$(REV)" --pkgarch=$(HOSTARCH) --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
+	
+
 $(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
