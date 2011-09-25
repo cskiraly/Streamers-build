@@ -143,7 +143,7 @@ uninstall:
 	rm -f /usr/local/bin/peerstreamer
 
 debian:
-	checkinstall -D --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=$(HOSTARCH) --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
+	checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=$(HOSTARCH) --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
 	
 
 $(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
