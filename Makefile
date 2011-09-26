@@ -146,8 +146,13 @@ uninstall:
 	rm -f /usr/local/bin/peerstreamer
 
 debian:
-	checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=$(HOSTARCH) --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
-	
+	checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
+
+debian-amd64:
+	checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
+
+rpm:
+	checkinstall -R --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
 
 $(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
