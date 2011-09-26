@@ -19,7 +19,7 @@
 ################################################################################
 
 NAME ?= PeerStreamer
-VERSION ?= 1.0.1
+VERSION ?= PeerStreamer-1.0
 
 SOURCE_DIR ?= ../../
 SOURCE_FILES ?= PeerStreamer.app
@@ -31,7 +31,7 @@ TEMPLATE_DMG ?= template.dmg
 # DMG building. No editing should be needed beyond this point.
 ################################################################################
 
-MASTER_DMG=$(NAME)-$(VERSION).dmg
+MASTER_DMG=$(VERSION).dmg
 WC_DMG=wc.dmg
 WC_DIR=wc
 

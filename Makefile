@@ -123,6 +123,9 @@ clean:
 	$(MAKE) -C ChunkerPlayer/chunker_player clean
 	$(MAKE) -C ChunkerPlayer/chunk_transcoding clean
 	$(MAKE) -C ChunkerPlayer/chunker_streamer clean
+ifdef MAC_OS
+	rm -rf *.app *.dmg
+endif
 
 distclean:
 	$(MAKE) -C $(THIRDPARTYLIBS) distclean
@@ -188,5 +191,5 @@ endif
 
 ifdef MAC_OS
 installer-OSX: $(DIR)
-	cd Installer/OSX/ && tar zfx OSX_template.tgz && ./makeApp.sh $(DIR) && rm -rf napa-template.app && make && mv PeerStreamer-1.0.1.dmg ../../
+	cd Installer/OSX/ && tar zfx OSX_template.tgz && ./makeApp.sh $(DIR) && rm -rf napa-template.app && make VERSION=$(REV) && mv $(REV).dmg ../../
 endif
