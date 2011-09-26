@@ -146,10 +146,10 @@ uninstall:
 	rm -f /usr/local/bin/peerstreamer
 
 debian:
-	checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
+	fakeroot checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
 
 debian-amd64:
-	checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
+	fakeroot checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPL 3" --maintainer="kiraly@disi.unitn.it" --nodoc --strip=yes --showinstall=no --default --backup=no
 
 rpm: TMPDIR:=$(shell mktemp -d)
 rpm: debian
