@@ -1,6 +1,6 @@
 !define PRODUCT_NAME "PeerStreamer"
 !define PRODUCT_VERSION "1.0.2"
-!define PRODUCT_PUBLISHER "NapaWine"
+!define PRODUCT_PUBLISHER "PeerStreamer"
 !define PRODUCT_WEB_SITE "http://peerstreamer.org"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -119,9 +119,9 @@ File "${PROGUNICON}"
 WriteUninstaller $INSTDIR\Uninstall.exe
 
 ; //////// CREATE REGISTRY KEYS FOR ADD/REMOVE PROGRAMS IN CONTROL PANEL /////////
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Peerstreamer" "DisplayName"\
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PeerStreamer" "DisplayName"\
 "Peerstreamer -- P2P video streaming client"
-WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Peerstreamer" "UninstallString" \
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PeerStreamer" "UninstallString" \
 "$INSTDIR\Uninstall.exe"
 ; //////////////////////// END CREATING REGISTRY KEYS ////////////////////////////
 
@@ -133,7 +133,7 @@ CreateDirectory "$SMPROGRAMS\${PRODUCT_PUBLISHER}"
 
 ;SetShellVarContext all
 CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${PROGICON}" 0
-CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall Peerstreamer.lnk" "$INSTDIR\Uninstall.exe"
+CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall PeerStreamer.lnk" "$INSTDIR\Uninstall.exe"
 CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\README.lnk" "$INSTDIR\README.txt"
 CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${PROGICON}" 0
 WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
@@ -157,12 +157,12 @@ RMDir /r "$INSTDIR"
 ; now remove all the startmenu links
 Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
 Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk"
-Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall Peerstreamer.lnk"
+Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall PeerStreamer.lnk"
 Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\README.lnk"
 RMDir /r "$SMPROGRAMS\${PRODUCT_PUBLISHER}"
 
 ; Now delete registry keys
-DeleteRegKey  /ifempty HKLM "Software\Peerstreamer"
-DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Peerstreamer"
+DeleteRegKey  /ifempty HKLM "Software\PeerStreamer"
+DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PeerStreamer"
 
 SectionEnd
