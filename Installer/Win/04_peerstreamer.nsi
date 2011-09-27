@@ -113,6 +113,8 @@ Section "Install" ; A "useful" name is not needed as we are not installing separ
 SetOutPath $INSTDIR
 
 File /r ${SOURCE_PATH}\*.*
+File "${PROGICON}"
+File "${PROGUNICON}"
 
 WriteUninstaller $INSTDIR\Uninstall.exe
 
