@@ -1,0 +1,125 @@
+!include MUI2.nsh
+
+; Name of our application
+Name "PeerStreamer"
+; The file to write
+OutFile "PeerStreamerInstaller.exe"
+
+; Set the default Installation Directory
+InstallDir "$PROGRAMFILES\PeerStreamer"
+InstallDirRegKey HKLM "Software\PeerStreamer" ""
+
+;Request application privileges for Windows Vista
+RequestExecutionLevel user
+
+!define MUI_ABORTWARNING
+
+RequestExecutionLevel admin
+
+
+Function .onInit
+
+!insertmacro MUI_LANGDLL_DISPLAY
+
+FunctionEnd
+
+!define MUI_WELCOMEFINISHPAGE_BITMAP "NapaWine.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "NapaWine.bmp"
+
+
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_DIRECTORY
+Var StartMenuFolder
+
+; Set the text which prompts the user to enter the installation directory
+DirText "Please choose a directory to which you'd like to install this application."
+;DirText "Scegliere una directory dove installare l'applicazione di Streaming."
+
+; ----------------------------------------------------------------------------------
+; *************************** SECTION FOR INSTALLING *******************************
+; ----------------------------------------------------------------------------------
+;Start Menu Folder Page Configuration
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\PeerStreamer"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "PeerStreamer"
+!insertmacro MUI_PAGE_STARTMENU "Application" $StartMenuFolder
+
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+
+; Languages
+!insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Italian"
+!insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "Hungarian"
+
+LangString MYVAR1 ${LANG_ENGLISH} "A test section."
+LangString MYVAR1 ${LANG_HUNGARIAN} "Teszt szekció"
+
+
+Section "" ; A "useful" name is not needed as we are not installing separate components
+
+; Set output path to the installation directory. Also sets the working
+; directory for shortcuts
+SetOutPath $INSTDIR\
+
+File /r ..\..\PeerStreamer\*.*
+
+;File peerstreamer.nsi
+
+WriteUninstaller $INSTDIR\Uninstall.exe
+
+!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+; ///////////////// CREATE SHORT CUTS //////////////////////////////////////
+
+CreateDirectory "$SMPROGRAMS\PeerStreamer"
+## Links
+CreateShortCut "$SMPROGRAMS\PeerStreamer\Run Peerstreamer.lnk" "$INSTDIR\chunker_player.exe"
+CreateShortCut "$SMPROGRAMS\PeerStreamer\Uninstall Peerstreamer.lnk" "$INSTDIR\Uninstall.exe"
+CreateShortCut "$SMPROGRAMS\PeerStreamer\README" "$INSTDIR\README"
+
+!insertmacro MUI_STARTMENU_WRITE_END
+
+; ///////////////// END CREATING SHORTCUTS ////////////////////////////////// 
+
+; //////// CREATE REGISTRY KEYS FOR ADD/REMOVE PROGRAMS IN CONTROL PANEL /////////
+
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Peerstreamer" "DisplayName"\
+"Peerstreamer -- P2P video streaming client"
+
+WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Peerstreamer" "UninstallString" \
+"$INSTDIR\Uninstall.exe"
+
+; //////////////////////// END CREATING REGISTRY KEYS ////////////////////////////
+
+MessageBox MB_OK "Installation was successful."
+
+SectionEnd
+
+; ----------------------------------------------------------------------------------
+; ************************** SECTION FOR UNINSTALLING ******************************
+; ---------------------------------------------------------------------------------- 
+
+Section "Uninstall"
+; remove all the files and folders
+RMDir /r "$INSTDIR"
+
+; now remove all the startmenu links
+Delete "$SMPROGRAMS\PeerStreamer\Run Peerstreamer.lnk"
+Delete "$SMPROGRAMS\PeerStreamer\Uninstall Peerstreamer.lnk"
+Delete "$SMPROGRAMS\PeerStreamer\README"
+RMDIR "$SMPROGRAMS\PeerStreamer"
+
+; Now delete registry keys
+DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Peerstreamer"
+DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Peerstreamer"
+
+SectionEnd
