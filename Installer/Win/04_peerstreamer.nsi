@@ -63,8 +63,8 @@ Var StartMenuFolder
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 # Finish Page Settings
-!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"  ; readme.txt file for user
-!define MUI_FINISHPAGE_SHOWREADME_NOTCHECED
+;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"  ; readme.txt file for user
+;!define MUI_FINISHPAGE_SHOWREADME_NOTCHECED
 # Run Program Settings
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${EXECUTABLE}"
 !define MUI_FINISHPAGE_RUN_NOTCHECED
@@ -134,7 +134,7 @@ CreateDirectory "$SMPROGRAMS\${PRODUCT_PUBLISHER}"
 ;SetShellVarContext all
 CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${PROGICON}" 0
 CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall PeerStreamer.lnk" "$INSTDIR\Uninstall.exe"
-CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\README.lnk" "$INSTDIR\README.txt"
+;CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\README.lnk" "$INSTDIR\README.txt"
 CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${PROGICON}" 0
 WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
 CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
@@ -158,7 +158,7 @@ RMDir /r "$INSTDIR"
 Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
 Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk"
 Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall PeerStreamer.lnk"
-Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\README.lnk"
+;Delete "$SMPROGRAMS\${PRODUCT_PUBLISHER}\README.lnk"
 RMDir /r "$SMPROGRAMS\${PRODUCT_PUBLISHER}"
 
 ; Now delete registry keys
