@@ -1,5 +1,5 @@
 !define PRODUCT_NAME "PeerStreamer"
-!define PRODUCT_VERSION "1.0.2"
+;!define PRODUCT_VERSION should be defined externally with /D or -D
 !define PRODUCT_PUBLISHER "PeerStreamer"
 !define PRODUCT_WEB_SITE "http://peerstreamer.org"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -21,7 +21,7 @@
 ; Name of our application
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 ; The file to write
-OutFile "PeerStreamerInstaller.exe"
+OutFile "PeerStreamerInstaller-${PRODUCT_VERSION}.exe"
 
 ; Set the default Installation Directory
 InstallDir "$PROGRAMFILES\${PRODUCT_PUBLISHER}"

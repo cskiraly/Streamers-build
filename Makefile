@@ -193,7 +193,7 @@ endif
 ifeq ($(HOSTARCH),mingw32)
 installer-win: $(DIR)
 	ln -s $(DIR) PeerStreamer
-	PEERSTREAMER_VERSION=$(REV) makensis Installer/Win/04_peerstreamer.nsi
+	makensis -DPRODUCT_VERSION="$(subst PeerStreamer-,,$(REV))" Installer/Win/04_peerstreamer.nsi 
 	rm PeerStreamer
 	mv Installer/Win/PeerStreamerInstaller*.exe .
 endif
