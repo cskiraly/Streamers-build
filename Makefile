@@ -10,6 +10,7 @@ ifeq ($(UNAME), Linux)
   # do something Linux-y
   STATIC ?= 2
   XSTATIC = -static
+  LINUX_OS = 1
 endif
 ifeq ($(UNAME), Darwin)
   # do something OSX-y
@@ -136,28 +137,6 @@ distclean:
 
 pack:  $(DIR)-stripped.tgz
 
-install: $(DIR)
-	mkdir -p /opt/peerstreamer
-	cp -r $(DIR)/* /opt/peerstreamer
-	ln -f -s /opt/peerstreamer/player.sh /usr/local/bin/peerstreamer
-
-uninstall:
-	rm -rf /opt/peerstreamer
-	rm -f /usr/local/bin/peerstreamer
-
-debian:
-	fakeroot checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
-
-debian-amd64:
-	fakeroot checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
-
-rpm: TMPDIR:=$(shell mktemp -d)
-rpm: debian
-	cp $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb $(TMPDIR)
-	cd $(TMPDIR) && alien -r $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb -v --fixperms -k
-	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.i386.rpm .
-	rm -rf $(TMPDIR)
-
 $(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 	rm -rf $(DIR) $(DIR).tgz $(DIR)-stripped.tgz
 	mkdir $(DIR)
@@ -188,6 +167,30 @@ ifneq ($(HOSTARCH),mingw32)
 	tar czf $(DIR)-stripped.tgz $(DIR)
 else
 	zip -r $(DIR).zip $(DIR)
+endif
+
+install: $(DIR)
+	mkdir -p /opt/peerstreamer
+	cp -r $(DIR)/* /opt/peerstreamer
+	ln -f -s /opt/peerstreamer/player.sh /usr/local/bin/peerstreamer
+
+uninstall:
+	rm -rf /opt/peerstreamer
+	rm -f /usr/local/bin/peerstreamer
+
+ifdef LINUX_OS
+debian:
+	fakeroot checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
+
+debian-amd64:
+	fakeroot checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
+
+rpm: TMPDIR:=$(shell mktemp -d)
+rpm: debian
+	cp $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb $(TMPDIR)
+	cd $(TMPDIR) && alien -r $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb -v --fixperms -k
+	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.i386.rpm .
+	rm -rf $(TMPDIR)
 endif
 
 ifeq ($(HOSTARCH),mingw32)
