@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=PeerStreamer
+Categories=Network;Video
+Exec=peerstreamer
+Icon=peerstreamer
+Terminal=false
+Type=Application

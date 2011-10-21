@@ -173,10 +173,14 @@ install: $(DIR)
 	mkdir -p /opt/peerstreamer
 	cp -r $(DIR)/* /opt/peerstreamer
 	ln -f -s /opt/peerstreamer/player.sh /usr/local/bin/peerstreamer
+	cp -r Installer/Lin/usr/share /usr
 
 uninstall:
 	rm -rf /opt/peerstreamer
 	rm -f /usr/local/bin/peerstreamer
+	rm -rf /usr/share/applications/peerstreamer.desktop
+	rm -rf /usr/share/menu/peerstreamer
+	rm -rf /usr/share/pixmaps/peerstreamer.xpm
 
 ifdef LINUX_OS
 debian:
