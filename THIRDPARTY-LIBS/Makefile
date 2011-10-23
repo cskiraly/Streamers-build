@@ -18,6 +18,7 @@ CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32m
 else
 ifeq ($(UNAME), Darwin)
 CONFIG_FFMPEG += --disable-avfilter # current libav fails to build on OSX Lion
+CONFIG_LIBVORBIS += --build=x86_64 # OSX 10.7.2 needs this
 endif
 
 CONFIG_FFMPEG += --enable-pthreads
@@ -83,7 +84,7 @@ libvorbis:
 	$(WGET_OR_CURL) http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz && tar xzf libvorbis-1.3.2.tar.gz && mv libvorbis-1.3.2 libvorbis && rm libvorbis-1.3.2.tar.gz
 
 libvorbis-install: libvorbis libogg-install
-	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ && make && make install
+	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ $(CONFIG_LIBVORBIS) && make && make install
 
 mp3lame:
 	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/3.98.4/lame-3.98.4.tar.gz && tar xzf lame-3.98.4.tar.gz && rm -f lame-3.98.4.tar.gz && mv lame-3.98.4 mp3lame;
