@@ -143,7 +143,7 @@ CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAM
 !insertmacro MUI_STARTMENU_WRITE_END
 ; ///////////////// END CREATING SHORTCUTS ////////////////////////////////// 
 
-MessageBox MB_OK "Welcome to NEM 2011 and enjoy the Streaming!"
+;MessageBox MB_OK "Welcome to NEM 2011 and enjoy the Streaming!"
 SectionEnd
 
 ; ----------------------------------------------------------------------------------
