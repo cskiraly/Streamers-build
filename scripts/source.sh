@@ -9,6 +9,7 @@ VIDEO_CODEC=mpeg4
 AUDIO_CODEC=libmp3lame
 IPC_IP="127.0.0.1"
 IPC_PORT=$((7000 + ($RANDOM % 1000)))
+SUBCHANNELS=1
 
 PORT=6666
 SOURCE_COPIES=3
@@ -31,13 +32,15 @@ function usage () {
    echo "  -m copies: copies of the stream sent out directly by the source ($SOURCE_COPIES)"
    echo "  -I ip: IPC ip ($IPC_IP)"
    echo "  -P port: IPC port ($IPC_PORT)"
+   echo "  -q subchannels: number of subchannels generated ($SUBCHANNELS)"
+   echo "     Note: this has to be in-line with chunker parameters (--passthrough, --indexchannel, --qualitylevels)"
    echo "  -c options: chunker extra option (e.g. -c '-s 640x480')"
    echo "  -s options: source streamer extra options (e.g. -s '-b 100')"
    echo "  -R : restart chunker if it dies for some reason (should not be needed with stable releases)"
    exit $1
 }
 
-while getopts "f:v:a:V:A:lop:m:I:P:c:s:Rh" opt; do
+while getopts "f:v:a:V:A:lop:m:I:P:c:s:Rq:h" opt; do
    case $opt in
 
    f )  FILE=$OPTARG ;;
@@ -54,6 +57,7 @@ while getopts "f:v:a:V:A:lop:m:I:P:c:s:Rh" opt; do
    c )  CHUNKER_XTRA+=" "$OPTARG ;;
    s )  STREAMER_XTRA+=" "$OPTARG ;;
    R )  RESTART=1 ;;
+   q )  SUBCHANNELS=$OPTARG ;;
    h )  usage 0 ;;
    \?)  usage 1 ;;
    esac
@@ -65,9 +69,11 @@ while [[ $RESTART || ! $CPID ]]; do
   ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  2>&1 1>chunker_streamer.log | tee chunker_streamer.err &
   CPID=$!
 
-  echo "starting streamer"
-  ./streamer-ml-monl-chunkstream-static -P $PORT -f tcp://0.0.0.0:$IPC_PORT -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA &
-  SPID=$!
+  for (( i = 0; i < $SUBCHANNELS; i++ )); do
+    echo "starting streamer $(($i+1))"
+    ./streamer-ml-monl-chunkstream-static -P $(($PORT+$i)) -f tcp://0.0.0.0:$(($IPC_PORT+$i)) -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA &
+    SPID=" $!"
+  done
 
   wait $CPID; kill $SPID
   sleep 1
