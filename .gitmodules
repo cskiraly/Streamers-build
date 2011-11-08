@@ -12,7 +12,7 @@
 	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/ffmpeg.git
 [submodule "THIRDPARTY-LIBS/x264"]
 	path = THIRDPARTY-LIBS/x264
-	url = git://git.videolan.org/x264.git
+	url = http://halo.disi.unitn.it/~cskiraly/PublicGits/x264.git
 [submodule "ChunkerPlayer"]
 	path = ChunkerPlayer
 	url = git://halo.disi.unitn.it/cskiraly/ChunkerPlayer.git
