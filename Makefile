@@ -46,12 +46,14 @@ $(THIRDPARTYLIBS):
 ifndef NOGIT
 update:
 	git pull
+	git submodule sync
 	git submodule update
 
 forceupdate:
 	git stash
 	git pull
 	git submodule foreach git stash
+	git submodule sync
 	git submodule update
 
 Streamers/.git:
