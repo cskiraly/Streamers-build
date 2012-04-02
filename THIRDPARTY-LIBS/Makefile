@@ -67,7 +67,7 @@ NAPA-build: NAPA-BASELIBS/$(GITREPOCHECK)
 endif
 
 x264/config.mak:
-	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ || { echo "Error configuring x264" && exit 1; }
+	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
 
 x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
@@ -78,26 +78,26 @@ libogg:
 	$(WGET_OR_CURL) http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz && tar xzf libogg-1.2.2.tar.gz && mv libogg-1.2.2 libogg && rm libogg-1.2.2.tar.gz
 
 libogg-install: libogg
-	cd libogg && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libogg-install/ && make && make install
+	cd libogg && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libogg-install/ --libdir=$(THIRDPARTYLIBS)/libogg-install/lib && make && make install
 
 libvorbis:
 	$(WGET_OR_CURL) http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz && tar xzf libvorbis-1.3.2.tar.gz && mv libvorbis-1.3.2 libvorbis && rm libvorbis-1.3.2.tar.gz
 
 libvorbis-install: libvorbis libogg-install
-	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ $(CONFIG_LIBVORBIS) && make && make install
+	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --libdir=$(THIRDPARTYLIBS)/libvorbis-install/lib --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ $(CONFIG_LIBVORBIS) && make && make install
 
 mp3lame:
 	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/3.98.4/lame-3.98.4.tar.gz && tar xzf lame-3.98.4.tar.gz && rm -f lame-3.98.4.tar.gz && mv lame-3.98.4 mp3lame;
 
 mp3lame-install: mp3lame
-	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ ${HOSTARCH:+--host=$HOSTARCH} && make && make install
+	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib ${HOSTARCH:+--host=$HOSTARCH} && make && make install
 
 ifneq ($(HOSTARCH),mingw32)
 ffmpeg/config.mak: x264-install libvorbis-install libogg-install mp3lame-install
 endif
 ffmpeg/config.mak:
-	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
-	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install
+	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install --libdir=$(THIRDPARTYLIBS)/ffmpeg-install/lib $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
+	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install --libdir=$BASEDIR/ffmpeg-install/lib
 	echo $(CONFIG_FFMPEG_CFLAGS) >ffmpeg.cflags
 	echo $(CONFIG_FFMPEG_LDFLAGS) >ffmpeg.ldflags
 	echo $(CONFIG_FFMPEG_LDLIBS) >ffmpeg.ldlibs
