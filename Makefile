@@ -36,6 +36,7 @@ endif
 all: $(DIR)
 
 simple: Streamers/streamer-udp-grapes$(EXE)
+tcp: Streamers/streamer-tcp-grapes$(EXE)
 ml: Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE)
 chunkstream: Streamers/streamer-udp-chunkstream$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 ml-chunkstream: Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
@@ -78,6 +79,14 @@ Streamers/streamer-udp-grapes: $(THIRDPARTYLIBS)
 	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
 	--with-net-helper=udp \
+	--with-static=$(STATIC)
+	$(MAKE) -C Streamers
+
+Streamers/streamer-tcp-grapes: $(THIRDPARTYLIBS)
+	cd Streamers && ./configure \
+	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-net-helper=tcp \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
 
