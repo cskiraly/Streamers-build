@@ -35,9 +35,9 @@ endif
 
 all: $(DIR)
 
-simple: Streamers/streamer-grapes$(EXE)
+simple: Streamers/streamer-udp-grapes$(EXE)
 ml: Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE)
-chunkstream: Streamers/streamer-chunkstream$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
+chunkstream: Streamers/streamer-udp-chunkstream$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 ml-chunkstream: Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/chunker_player/chunker_player$(EXE)
 
 $(THIRDPARTYLIBS):
@@ -73,10 +73,11 @@ ChunkerPlayer/chunker_player/chunker_player$(EXE): ChunkerPlayer/.git
 endif
 
 #.PHONY: Streamers/streamer-grapes Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE) Streamers/streamer-chunkstream$(EXE) Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
-Streamers/streamer-grapes: $(THIRDPARTYLIBS)
+Streamers/streamer-udp-grapes: $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-net-helper=udp \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
 
@@ -86,14 +87,15 @@ Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
 	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
-	--with-ml --with-monl \
+	--with-net-helper=ml --with-monl \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
 
-Streamers/streamer-chunkstream$(EXE): $(THIRDPARTYLIBS)
+Streamers/streamer-udp-chunkstream$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-io=chunkstream \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-net-helper=udp \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
 
@@ -102,7 +104,7 @@ Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 	--with-io=chunkstream \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
 	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
-	--with-ml --with-monl \
+	--with-net-helper=ml --with-monl \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
 
