@@ -18,6 +18,7 @@ CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32m
 else
 ifeq ($(UNAME), Darwin)
 CONFIG_FFMPEG += --disable-avfilter # current libav fails to build on OSX Lion
+CONFIG_FFMPEG += --disable-vda # seems to create some linking problems in ffmpeg 0.10.2
 CONFIG_LIBVORBIS += --build=x86_64 # OSX 10.7.2 needs this
 endif
 
