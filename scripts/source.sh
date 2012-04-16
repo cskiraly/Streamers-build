@@ -64,17 +64,17 @@ while getopts "f:v:a:V:A:lop:m:I:P:c:s:Rq:h" opt; do
    esac
 done
 
-while [[ $RESTART || ! $CPID ]]; do
+for (( j = 0;  $RESTART || j < 1; j++ )); do
 
   echo "starting chunker"
   DATE=`date +%Y%m%d_%H%M%S`
-  ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  1>chunker_streamer_$DATE.log 2>chunker_streamer_$DATE.err &
+  ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$(($IPC_PORT+$j*$SUBCHANNELS)) $CHUNKER_XTRA  1>chunker_streamer_$DATE.log 2>chunker_streamer_$DATE.err &
   CPID=$!
 
   SPID=""
   for (( i = 0; i < $SUBCHANNELS; i++ )); do
     echo "starting streamer $(($i+1))"
-    ./streamer-ml-monl-chunkstream-static -P $(($PORT+$i)) -f tcp://0.0.0.0:$(($IPC_PORT+$i)) -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA &
+    ./streamer-ml-monl-chunkstream-static -P $(($PORT+$i)) -f tcp://0.0.0.0:$(($IPC_PORT+$j*$SUBCHANNELS+$i)) -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA &
     SPID+=" $!"
   done
 
