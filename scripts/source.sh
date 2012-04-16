@@ -66,7 +66,8 @@ done
 while [[ $RESTART || ! $CPID ]]; do
 
   echo "starting chunker"
-  ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  2>&1 1>chunker_streamer.log | tee chunker_streamer.err &
+  DATE=`date +%Y%m%d_%H%M%S`
+  ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  1>chunker_streamer_$DATE.log 2>chunker_streamer_$DATE.err &
   CPID=$!
 
   for (( i = 0; i < $SUBCHANNELS; i++ )); do
