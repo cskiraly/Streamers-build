@@ -10,6 +10,7 @@ AUDIO_CODEC=libmp3lame
 IPC_IP="127.0.0.1"
 IPC_PORT=$((7000 + ($RANDOM % 1000)))
 SUBCHANNELS=1
+RESTART=0
 
 PORT=6666
 SOURCE_COPIES=3
@@ -70,10 +71,11 @@ while [[ $RESTART || ! $CPID ]]; do
   ./chunker_streamer -i $FILE -a $AUDIO_BPS -v $VIDEO_BPS -A $AUDIO_CODEC -V $VIDEO_CODEC -F tcp://$IPC_IP:$IPC_PORT $CHUNKER_XTRA  1>chunker_streamer_$DATE.log 2>chunker_streamer_$DATE.err &
   CPID=$!
 
+  SPID=""
   for (( i = 0; i < $SUBCHANNELS; i++ )); do
     echo "starting streamer $(($i+1))"
     ./streamer-ml-monl-chunkstream-static -P $(($PORT+$i)) -f tcp://0.0.0.0:$(($IPC_PORT+$i)) -m $SOURCE_COPIES --autotune_period 0 $STREAMER_XTRA &
-    SPID=" $!"
+    SPID+=" $!"
   done
 
   wait $CPID; kill $SPID
