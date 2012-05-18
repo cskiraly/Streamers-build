@@ -73,7 +73,7 @@ ChunkerPlayer/chunker_player/chunker_player$(EXE): ChunkerPlayer/.git
 endif
 
 #.PHONY: Streamers/streamer-grapes Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE) Streamers/streamer-chunkstream$(EXE) Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE)
-Streamers/streamer-udp-grapes: $(THIRDPARTYLIBS)
+Streamers/streamer-udp-grapes$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
