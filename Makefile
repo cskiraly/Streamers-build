@@ -150,9 +150,9 @@ $(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/ch
 	cp ChunkerPlayer/chunker_player/icons/* $(DIR)/icons
 	cp ChunkerPlayer/chunker_player/stats_font.ttf ChunkerPlayer/chunker_player/mainfont.ttf ChunkerPlayer/chunker_player/napalogo_small.bmp $(DIR)
 	echo streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) > $(DIR)/peer_exec_name.conf
+	cp ChunkerPlayer/chunker_streamer/chunker_streamer$(EXE) ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
 ifneq ($(HOSTARCH),mingw32)
 	ln -s streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)/streamer
-	cp ChunkerPlayer/chunker_streamer/chunker_streamer ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
 	cp scripts/source.sh $(DIR)
 	cp scripts/player.sh $(DIR)
 endif
