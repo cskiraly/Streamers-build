@@ -76,7 +76,7 @@ endif
 Streamers/streamer-udp-grapes: $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
-	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
 	--with-net-helper=udp \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
@@ -85,7 +85,7 @@ Streamers/streamer-udp-grapes: $(THIRDPARTYLIBS)
 Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
-	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
 	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
 	--with-net-helper=ml --with-monl \
 	--with-static=$(STATIC)
@@ -94,7 +94,7 @@ Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 Streamers/streamer-udp-chunkstream$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-io=chunkstream \
-	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
 	--with-net-helper=udp \
 	--with-static=$(STATIC)
 	$(MAKE) -C Streamers
@@ -102,7 +102,7 @@ Streamers/streamer-udp-chunkstream$(EXE): $(THIRDPARTYLIBS)
 Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-io=chunkstream \
-	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg --with-x264=$(THIRDPARTYLIBS)/x264 \
+	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
 	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
 	--with-net-helper=ml --with-monl \
 	--with-static=$(STATIC)

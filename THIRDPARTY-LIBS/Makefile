@@ -26,6 +26,7 @@ CONFIG_FFMPEG += --enable-pthreads
 CONFIG_FFMPEG += --enable-libx264
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
+CONFIG_FFMPEG_LDLIBS += -lx264
 CONFIG_FFMPEG += --enable-libvorbis
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libvorbis-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libvorbis-install/lib
