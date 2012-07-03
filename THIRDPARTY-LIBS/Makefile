@@ -69,7 +69,7 @@ NAPA-build: NAPA-BASELIBS/$(GITREPOCHECK)
 endif
 
 x264/config.mak:
-	./configure --disable-lavf ${CROSSPREFIX:+--cross-prefix=$CROSSPREFIX} ${HOSTARCH:+--host=$HOSTARCH} --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
+	cd x264 && ./configure --disable-lavf ${CROSSPREFIX:+--cross-prefix=$CROSSPREFIX} ${HOSTARCH:+--host=$HOSTARCH} --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
 
 x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
