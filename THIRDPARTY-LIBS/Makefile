@@ -14,7 +14,7 @@ CONFIG_FFMPEG += --disable-vaapi #there seems to be no static version of vaapi, 
 CONFIG_FFMPEG += --enable-gpl
 CONFIG_FFMPEG += --disable-doc #for less build dependecies and faster build
 ifeq ($(HOSTARCH),mingw32)
-CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=i586-mingw32msvc- --target-os=mingw32 --enable-memalign-hack --disable-pthreads
+CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=$(CROSSPREFIX) --target-os=mingw32 --enable-memalign-hack --disable-pthreads
 else
 ifeq ($(UNAME), Darwin)
 CONFIG_FFMPEG += --disable-avfilter # current libav fails to build on OSX Lion
