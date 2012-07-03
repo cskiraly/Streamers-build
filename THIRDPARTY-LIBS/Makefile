@@ -13,8 +13,8 @@ CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg ve
 CONFIG_FFMPEG += --disable-vaapi #there seems to be no static version of vaapi, so it creates problems in distributed binaries
 CONFIG_FFMPEG += --enable-gpl
 CONFIG_FFMPEG += --disable-doc #for less build dependecies and faster build
-ifeq ($(HOSTARCH),mingw32)
-CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=$(CROSSPREFIX) --target-os=mingw32 --enable-memalign-hack --disable-pthreads
+ifneq (,$(findstring mingw32,$(HOSTARCH)))
+CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=$(CROSSPREFIX) --target-os=$(HOSTARCH) --enable-memalign-hack --disable-pthreads
 else
 ifeq ($(UNAME), Darwin)
 CONFIG_FFMPEG += --disable-avfilter # current libav fails to build on OSX Lion
@@ -43,7 +43,7 @@ endif
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
 
-ifeq ($(HOSTARCH),mingw32)
+ifneq (,$(findstring mingw32,$(HOSTARCH)))
 FLAGS_GRAPES += ARCH=win32
 ALTO_OPTION = ALTO=0
 endif
@@ -69,7 +69,7 @@ NAPA-build: NAPA-BASELIBS/$(GITREPOCHECK)
 endif
 
 x264/config.mak:
-	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
+	./configure --disable-lavf ${CROSSPREFIX:+--cross-prefix=$CROSSPREFIX} ${HOSTARCH:+--host=$HOSTARCH} --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
 
 x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
@@ -94,7 +94,7 @@ mp3lame:
 mp3lame-install: mp3lame
 	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib ${HOSTARCH:+--host=$HOSTARCH} && make && make install
 
-ifneq ($(HOSTARCH),mingw32)
+ifeq (,$(findstring mingw32,$(HOSTARCH)))
 ffmpeg/config.mak: x264-install libvorbis-install libogg-install mp3lame-install
 endif
 ffmpeg/config.mak:

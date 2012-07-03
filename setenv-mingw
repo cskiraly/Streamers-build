@@ -1,4 +1,4 @@
-export CROSSPREFIX=i586-mingw32msvc-
+export CROSSPREFIX=i686-w64-mingw32-
 
 export CC=${CROSSPREFIX}gcc
 export CXX=${CROSSPREFIX}g++
@@ -14,4 +14,5 @@ export OBJDUMP=${CROSSPREFIX}objdump
 export RC=${CROSSPREFIX}windres
 export WINDRES=${CROSSPREFIX}windres
 export LIBS="-lwsock32 -lws2_32"
-export HOSTARCH="mingw32"
+export HOSTARCH="i686-w64-mingw32"
+export BUILDARCH="x86_64-linux-gnu"
