@@ -1,4 +1,11 @@
-export CROSSPREFIX=i586-mingw32msvc-
+if which i586-mingw32msvc-nm; then
+  export CROSSPREFIX=i586-mingw32msvc-
+elif which i686-w64-mingw32-nm; then
+  export CROSSPREFIX=i686-w64-mingw32-
+else
+  echo "Error: gcc-mingw32 doesn't seem to be installed"
+  exit 1
+fi
 
 export CC=${CROSSPREFIX}gcc
 export CXX=${CROSSPREFIX}g++
