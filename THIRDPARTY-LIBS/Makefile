@@ -23,10 +23,6 @@ CONFIG_LIBVORBIS += --build=x86_64 # OSX 10.7.2 needs this
 endif
 
 CONFIG_FFMPEG += --enable-pthreads
-CONFIG_FFMPEG += --enable-libx264
-CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
-CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
-CONFIG_FFMPEG_LDLIBS += -lx264
 CONFIG_FFMPEG += --enable-libvorbis
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libvorbis-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libvorbis-install/lib
@@ -35,17 +31,24 @@ CONFIG_FFMPEG_LDLIBS += -lvorbisenc
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libogg-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libogg-install/lib
 CONFIG_FFMPEG_LDLIBS += -logg
+endif
+CONFIG_FFMPEG += --enable-libx264
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
+CONFIG_FFMPEG_LDLIBS += -lx264
 CONFIG_FFMPEG += --enable-libmp3lame
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
 CONFIG_FFMPEG_LDLIBS += -lmp3lame
-endif
+
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
 
 ifeq ($(HOSTARCH),mingw32)
 FLAGS_GRAPES += ARCH=win32
 ALTO_OPTION = ALTO=0
+CONFIG_X264 += --host=$(HOSTARCH)
+CONFIG_MP3LAME += --host=$(HOSTARCH)
 endif
 
 WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
@@ -69,7 +72,7 @@ NAPA-build: NAPA-BASELIBS/$(GITREPOCHECK)
 endif
 
 x264/config.mak:
-	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
+	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib $(CONFIG_X264) || { echo "Error configuring x264" && exit 1; }
 
 x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
@@ -88,15 +91,19 @@ libvorbis:
 libvorbis-install: libvorbis libogg-install
 	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --libdir=$(THIRDPARTYLIBS)/libvorbis-install/lib --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ $(CONFIG_LIBVORBIS) && make && make install
 
+mp3lame: VERSION_LAME_DIR = 3.99
+mp3lame: VERSION_LAME = 3.99.5
 mp3lame:
-	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/3.98.4/lame-3.98.4.tar.gz && tar xzf lame-3.98.4.tar.gz && rm -f lame-3.98.4.tar.gz && mv lame-3.98.4 mp3lame;
+	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/$(VERSION_LAME_DIR)/lame-$(VERSION_LAME).tar.gz && tar xzf lame-$(VERSION_LAME).tar.gz && rm -f lame-$(VERSION_LAME).tar.gz && mv lame-$(VERSION_LAME) mp3lame;
 
 mp3lame-install: mp3lame
-	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib ${HOSTARCH:+--host=$HOSTARCH} && make && make install
+	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib $(CONFIG_MP3LAME) && make && make install
 
 ifneq ($(HOSTARCH),mingw32)
-ffmpeg/config.mak: x264-install libvorbis-install libogg-install mp3lame-install
+ffmpeg/config.mak: libvorbis-install libogg-install
 endif
+ffmpeg/config.mak: x264-install
+ffmpeg/config.mak: mp3lame-install
 ffmpeg/config.mak:
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install --libdir=$(THIRDPARTYLIBS)/ffmpeg-install/lib $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install --libdir=$BASEDIR/ffmpeg-install/lib
