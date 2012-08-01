@@ -31,15 +31,15 @@ CONFIG_FFMPEG_LDLIBS += -lvorbisenc
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libogg-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libogg-install/lib
 CONFIG_FFMPEG_LDLIBS += -logg
-CONFIG_FFMPEG += --enable-libmp3lame
-CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
-CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
-CONFIG_FFMPEG_LDLIBS += -lmp3lame
 endif
 CONFIG_FFMPEG += --enable-libx264
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
 CONFIG_FFMPEG_LDLIBS += -lx264
+CONFIG_FFMPEG += --enable-libmp3lame
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
+CONFIG_FFMPEG_LDLIBS += -lmp3lame
 
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
@@ -48,6 +48,7 @@ ifeq ($(HOSTARCH),mingw32)
 FLAGS_GRAPES += ARCH=win32
 ALTO_OPTION = ALTO=0
 CONFIG_X264 += --host=$(HOSTARCH)
+CONFIG_MP3LAME += --host=$(HOSTARCH)
 endif
 
 WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
@@ -96,12 +97,13 @@ mp3lame:
 	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/$(VERSION_LAME_DIR)/lame-$(VERSION_LAME).tar.gz && tar xzf lame-$(VERSION_LAME).tar.gz && rm -f lame-$(VERSION_LAME).tar.gz && mv lame-$(VERSION_LAME) mp3lame;
 
 mp3lame-install: mp3lame
-	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib ${HOSTARCH:+--host=$HOSTARCH} && make && make install
+	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib $(CONFIG_MP3LAME) && make && make install
 
 ifneq ($(HOSTARCH),mingw32)
-ffmpeg/config.mak: libvorbis-install libogg-install mp3lame-install
+ffmpeg/config.mak: libvorbis-install libogg-install
 endif
 ffmpeg/config.mak: x264-install
+ffmpeg/config.mak: mp3lame-install
 ffmpeg/config.mak:
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install --libdir=$(THIRDPARTYLIBS)/ffmpeg-install/lib $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install --libdir=$BASEDIR/ffmpeg-install/lib
