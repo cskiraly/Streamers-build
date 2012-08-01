@@ -23,10 +23,6 @@ CONFIG_LIBVORBIS += --build=x86_64 # OSX 10.7.2 needs this
 endif
 
 CONFIG_FFMPEG += --enable-pthreads
-CONFIG_FFMPEG += --enable-libx264
-CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
-CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
-CONFIG_FFMPEG_LDLIBS += -lx264
 CONFIG_FFMPEG += --enable-libvorbis
 CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/libvorbis-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/libvorbis-install/lib
@@ -40,12 +36,18 @@ CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/mp3lame-install/include
 CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/mp3lame-install/lib
 CONFIG_FFMPEG_LDLIBS += -lmp3lame
 endif
+CONFIG_FFMPEG += --enable-libx264
+CONFIG_FFMPEG_CFLAGS += -I$(THIRDPARTYLIBS)/x264-install/include
+CONFIG_FFMPEG_LDFLAGS += -L$(THIRDPARTYLIBS)/x264-install/lib
+CONFIG_FFMPEG_LDLIBS += -lx264
+
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
 
 ifeq ($(HOSTARCH),mingw32)
 FLAGS_GRAPES += ARCH=win32
 ALTO_OPTION = ALTO=0
+CONFIG_X264 += --host=$(HOSTARCH)
 endif
 
 WGET_OR_CURL = $(shell which wget || echo "curl -O -L")
@@ -69,7 +71,7 @@ NAPA-build: NAPA-BASELIBS/$(GITREPOCHECK)
 endif
 
 x264/config.mak:
-	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib || { echo "Error configuring x264" && exit 1; }
+	cd x264 && ./configure --disable-lavf --prefix=$(THIRDPARTYLIBS)/x264-install/ --libdir=$(THIRDPARTYLIBS)/x264-install/lib $(CONFIG_X264) || { echo "Error configuring x264" && exit 1; }
 
 x264-install: x264/config.mak
 	$(MAKE) -C x264 || { echo "Error compiling x264" && exit 1; }
@@ -95,8 +97,9 @@ mp3lame-install: mp3lame
 	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib ${HOSTARCH:+--host=$HOSTARCH} && make && make install
 
 ifneq ($(HOSTARCH),mingw32)
-ffmpeg/config.mak: x264-install libvorbis-install libogg-install mp3lame-install
+ffmpeg/config.mak: libvorbis-install libogg-install mp3lame-install
 endif
+ffmpeg/config.mak: x264-install
 ffmpeg/config.mak:
 	cd ffmpeg && ./configure --prefix=$(THIRDPARTYLIBS)/ffmpeg-install --libdir=$(THIRDPARTYLIBS)/ffmpeg-install/lib $(CONFIG_FFMPEG) || { echo "Error configuring ffmpeg" && exit 1; }
 	#in case x264 is not reqired (do we need the encoding?): ./configure --enable-gpl --enable-pthreads --prefix=$BASEDIR/ffmpeg-install --libdir=$BASEDIR/ffmpeg-install/lib
