@@ -90,8 +90,10 @@ libvorbis:
 libvorbis-install: libvorbis libogg-install
 	cd libvorbis && ./configure --disable-oggtest --disable-shared --prefix=$(THIRDPARTYLIBS)/libvorbis-install/ --libdir=$(THIRDPARTYLIBS)/libvorbis-install/lib --with-ogg=$(THIRDPARTYLIBS)/libogg-install/ $(CONFIG_LIBVORBIS) && make && make install
 
+mp3lame: VERSION_LAME_DIR = 3.98.4
+mp3lame: VERSION_LAME = 3.98.4
 mp3lame:
-	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/3.98.4/lame-3.98.4.tar.gz && tar xzf lame-3.98.4.tar.gz && rm -f lame-3.98.4.tar.gz && mv lame-3.98.4 mp3lame;
+	$(WGET_OR_CURL) http://sourceforge.net/projects/lame/files/lame/$(VERSION_LAME_DIR)/lame-$(VERSION_LAME).tar.gz && tar xzf lame-$(VERSION_LAME).tar.gz && rm -f lame-$(VERSION_LAME).tar.gz && mv lame-$(VERSION_LAME) mp3lame;
 
 mp3lame-install: mp3lame
 	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib ${HOSTARCH:+--host=$HOSTARCH} && make && make install
