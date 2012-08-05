@@ -84,7 +84,8 @@ Streamers/streamer-udp-grapes$(EXE): $(THIRDPARTYLIBS)
 #version with NAPA-libs
 Streamers/streamer-ml-monl-grapes$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
-	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags`" --with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs`" \
+	--with-ldflags="`cat $(THIRDPARTYLIBS)/ffmpeg.ldflags` -L$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libminiupnpc/lib/" \
+	--with-ldlibs="`cat $(THIRDPARTYLIBS)/ffmpeg.ldlibs` -lminiupnpc" \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
 	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
 	--with-net-helper=ml --with-monl \
@@ -102,6 +103,8 @@ Streamers/streamer-udp-chunkstream$(EXE): $(THIRDPARTYLIBS)
 Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE): $(THIRDPARTYLIBS)
 	cd Streamers && ./configure \
 	--with-io=chunkstream \
+	--with-ldflags="-L$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libminiupnpc/lib/" \
+	--with-ldlibs="-lminiupnpc" \
 	--with-grapes=$(THIRDPARTYLIBS)/GRAPES --with-ffmpeg=$(THIRDPARTYLIBS)/ffmpeg \
 	--with-napa=$(THIRDPARTYLIBS)/NAPA-BASELIBS/ --with-libevent=$(THIRDPARTYLIBS)/NAPA-BASELIBS/3RDPARTY-LIBS/libevent \
 	--with-net-helper=ml --with-monl \
