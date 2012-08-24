@@ -151,7 +151,7 @@ $(DIR):  Streamers/streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) ChunkerPlayer/ch
 	cp ChunkerPlayer/chunker_player/stats_font.ttf ChunkerPlayer/chunker_player/mainfont.ttf ChunkerPlayer/chunker_player/napalogo_small.bmp $(DIR)
 	echo streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) > $(DIR)/peer_exec_name.conf
 	cp ChunkerPlayer/chunker_streamer/chunker_streamer$(EXE) ChunkerPlayer/chunker_streamer/chunker.conf $(DIR)
-ifneq ($(HOSTARCH),mingw32)
+ifeq (,$(findstring mingw32,$(HOSTARCH)))
 	ln -s streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) $(DIR)/streamer
 	cp scripts/source.sh $(DIR)
 	cp scripts/player.sh $(DIR)
@@ -163,11 +163,11 @@ $(DIR).tgz: $(DIR)
 	tar czf $(DIR).tgz $(DIR)
 
 $(DIR)-stripped.tgz: $(DIR).tgz
-ifneq ($(HOSTARCH),mingw32)
+ifeq (,$(findstring mingw32,$(HOSTARCH)))
 	cd $(DIR) && strip chunker_streamer$(EXE)
 endif
 	cd $(DIR) && strip streamer-ml-monl-chunkstream$(XSTATIC)$(EXE) chunker_player$(EXE)
-ifneq ($(HOSTARCH),mingw32)
+ifeq (,$(findstring mingw32,$(HOSTARCH)))
 	tar czf $(DIR)-stripped.tgz $(DIR)
 else
 	zip -r $(DIR).zip $(DIR)
@@ -201,7 +201,7 @@ rpm: debian
 	rm -rf $(TMPDIR)
 endif
 
-ifeq ($(HOSTARCH),mingw32)
+ifneq (,$(findstring mingw32,$(HOSTARCH)))
 installer-win: $(DIR)
 	ln -s $(DIR) PeerStreamer
 	makensis -DPRODUCT_VERSION="$(subst PeerStreamer-,,$(REV))" Installer/Win/peerstreamer.nsi
