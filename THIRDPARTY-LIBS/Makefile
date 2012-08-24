@@ -13,7 +13,7 @@ CONFIG_FFMPEG += --disable-sse #required because of an error in recent ffmpeg ve
 CONFIG_FFMPEG += --disable-vaapi #there seems to be no static version of vaapi, so it creates problems in distributed binaries
 CONFIG_FFMPEG += --enable-gpl
 CONFIG_FFMPEG += --disable-doc #for less build dependecies and faster build
-ifeq ($(HOSTARCH),mingw32)
+ifneq (,$(findstring mingw32,$(HOSTARCH)))
 CONFIG_FFMPEG += --arch=i586 --enable-cross-compile --cross-prefix=$(CROSSPREFIX) --target-os=mingw32 --enable-memalign-hack --disable-pthreads
 else
 ifeq ($(UNAME), Darwin)
@@ -44,7 +44,7 @@ CONFIG_FFMPEG_LDLIBS += -lmp3lame
 CONFIG_FFMPEG += --extra-cflags='$(CONFIG_FFMPEG_CFLAGS)'
 CONFIG_FFMPEG += --extra-ldflags='$(CONFIG_FFMPEG_LDFLAGS)'
 
-ifeq ($(HOSTARCH),mingw32)
+ifneq (,$(findstring mingw32,$(HOSTARCH)))
 FLAGS_GRAPES += ARCH=win32
 ALTO_OPTION = ALTO=0
 CONFIG_X264 += --host=$(HOSTARCH)
@@ -99,7 +99,7 @@ mp3lame:
 mp3lame-install: mp3lame
 	cd mp3lame && ./configure --disable-gtktest --disable-frontend --disable-shared --prefix=$(THIRDPARTYLIBS)/mp3lame-install/ --libdir=$(THIRDPARTYLIBS)/mp3lame-install/lib $(CONFIG_MP3LAME) && make && make install
 
-ifneq ($(HOSTARCH),mingw32)
+ifeq (,$(findstring mingw32,$(HOSTARCH)))
 ffmpeg/config.mak: libvorbis-install libogg-install
 endif
 ffmpeg/config.mak: x264-install

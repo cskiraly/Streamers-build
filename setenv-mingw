@@ -1,7 +1,9 @@
 if which i586-mingw32msvc-nm; then
   export CROSSPREFIX=i586-mingw32msvc-
+  export HOSTARCH="i586-pc-mingw32"
 elif which i686-w64-mingw32-nm; then
   export CROSSPREFIX=i686-w64-mingw32-
+  export HOSTARCH="i686-w64-mingw32"
 else
   echo "Error: gcc-mingw32 doesn't seem to be installed"
   exit 1
@@ -21,4 +23,3 @@ export OBJDUMP=${CROSSPREFIX}objdump
 export RC=${CROSSPREFIX}windres
 export WINDRES=${CROSSPREFIX}windres
 export LIBS="-lwsock32 -lws2_32"
-export HOSTARCH="mingw32"
