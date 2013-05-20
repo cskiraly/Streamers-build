@@ -1,14 +1,14 @@
-!define PRODUCT_NAME 		"PeerStreamer"
+!define PRODUCT_NAME "PeerStreamer"
 ;!define PRODUCT_VERSION should be defined externally with /D or -D
-!define DESCRIPTION 		"A peer-to-peer video streaming client"
-!define COMPANYNAME 		"University of Trento and EIT"
-!define PRODUCT_PUBLISHER 	"PeerStreamer"
-!define PRODUCT_WEB_SITE 	"http://peerstreamer.org"
-!define PRODUCT_UNINST_KEY 	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY	"HKLM"
-!define SOURCE_PATH 		"..\..\PeerStreamer\"
-!define EXECUTABLE 		"chunker_player.exe"
-!define SETUP_BITMAP 		"peerstreamer.bmp"
+!define DESCRIPTION "A peer-to-peer video streaming client"
+;!define COMPANYNAME "University of Trento and EIT"
+!define PRODUCT_PUBLISHER "PeerStreamer"
+!define PRODUCT_WEB_SITE "http://peerstreamer.org"
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define SOURCE_PATH "..\..\PeerStreamer\"
+!define EXECUTABLE "chunker_player.exe"
+!define SETUP_BITMAP "peerstreamer.bmp"
 
 ; MUI 1.67 compatible ------
 !include MUI2.nsh
@@ -24,7 +24,7 @@
 ; MUI Settings
 !define MUI_ICON "eit-napa.ico"
 !define MUI_UNICON "uneit-napa.ico"
-;!define MUI_STARTMENU_WRITE_BEGIN "${SETUP_BITMAP}"
+!define MUI_STARTMENU_WRITE_BEGIN "${SETUP_BITMAP}"
 
 ; Name of our application
 Name "${PRODUCT_NAME}"
@@ -38,7 +38,6 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 InstallDirRegKey HKLM "Software\${PRODUCT_PUBLISHER}" ""
-;InstallDirRegKey HKLM "Software\${PRODUCT_PUBLISHER}" "InstallationDir"
 
 ;Request application privileges for Windows Vista
 RequestExecutionLevel user
@@ -61,51 +60,38 @@ Var StartMenuFolder
 !define MUI_WELCOMEPAGE_TITLE_3LINES # Extra space for the title area
 !define MUI_WELCOMEPAGE_TEXT "PeerStreamer the open source P2P video client."
 ; License page
-
 !insertmacro MUI_PAGE_WELCOME
 LicenseData "license.rtf"
 !insertmacro MUI_PAGE_LICENSE "license.txt"   ; text file with license terms
-
 ; Components
 ;!insertmacro MUI_PAGE_COMPONENTS
 ;!define MUI_LICENSEPAGE_BGCOLOR  "/windows"
 ;!define MUI_COMPONENTSPAGE_NODESC
-
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
-
 ; Menu
-;!define MUI_STARTMENUPAGE
-
+!define MUI_STARTMENUPAGE
 ;Start Menu Folder Page Configuration
-;	!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT_PUBLISHER}"
-	!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
-	!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PRODUCT_PUBLISHER}"
-	!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_PUBLISHER}"
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PRODUCT_PUBLISHER}"
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_PUBLISHER}"
 
 !insertmacro MUI_PAGE_STARTMENU "Application" $StartMenuFolder
-
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-;	!define MUI_FINISHPAGE_NOAUTOCLOSE	# ShowInstDetails
+;!define MUI_FINISHPAGE_NOAUTOCLOSE	# ShowInstDetails
 # Finish Page Settings
+;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"  ; readme.txt file for user
+;!define MUI_FINISHPAGE_SHOWREADME_NOTCHECED
 # Run Program Settings
-	!define MUI_FINISHPAGE_RUN "$INSTDIR\${EXECUTABLE}"
-;    !define MUI_FINISHPAGE_RUN_TEXT "Start ${PRODUCT_NAME}"
-	;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"  ; readme.txt file for user
-	;!define MUI_FINISHPAGE_SHOWREADME_NOTCHECED
-
-	!define MUI_FINISHPAGE_RUN_NOTCHECED
-	!define MUI_FINISHPAGE_LINK "Visit the ${PRODUCT_NAME} site for news, FAQ's and support"
-	!define MUI_FINISHPAGE_LINK_LOCATION "${PRODUCT_WEB_SITE}"
-	!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${EXECUTABLE}"
+!define MUI_FINISHPAGE_RUN_NOTCHECED
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!define MUI_FINISHPAGE_RUN_TEXT "Start ${PRODUCT_NAME}"
+!define MUI_FINISHPAGE_LINK "Visit the ${PRODUCT_NAME} site for news, FAQ's and support"
+!define MUI_FINISHPAGE_LINK_LOCATION "${PRODUCT_WEB_SITE}"
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT_PUBLISHER}"
 !insertmacro MUI_PAGE_FINISH
-
-# Start Menu Settings
-;--------------------------------
-;MUI Reserved Files
-!insertmacro MUI_RESERVEFILE_LANGDLL
-ReserveFile "${NSISDIR}\Plugins\AdvSplash.dll"
 
 ; Set the text which prompts the user to enter the installation directory
 DirText "Please choose a directory to which you'd like to install ${PRODUCT_NAME}."
@@ -119,12 +105,10 @@ DirText "Please choose a directory to which you'd like to install ${PRODUCT_NAME
 !define MUI_HEADERIMAGE_UNBITMAP_NOSTRETCH
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${SETUP_BITMAP}"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP_NOSTRETCH
-
-
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
-;	!define MUI_UNFINISHPAGE_NOAUTOCLOSE
+;!define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_UNPAGE_FINISH
 
 ; Languages
@@ -157,16 +141,13 @@ WriteUninstaller $INSTDIR\Uninstall.exe
 
 ; //////// CREATE REGISTRY KEYS FOR ADD/REMOVE PROGRAMS IN CONTROL PANEL /////////
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_PUBLISHER}" "DisplayName"\
-"${COMPANYNAME} - ${PRODUCT_NAME} - ${DESCRIPTION}"
+"${PRODUCT_NAME} - ${DESCRIPTION}"
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_PUBLISHER}" "UninstallString" \
 "$INSTDIR\Uninstall.exe"
 ; //////////////////////// END CREATING REGISTRY KEYS ////////////////////////////
 
 !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 ; ///////////////// CREATE SHORT CUTS //////////////////////////////////////
-
-SetShellVarContext all
-
 CreateDirectory "$SMPROGRAMS\${PRODUCT_PUBLISHER}"
 ## Links
 CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${MUI_ICON}" 0
@@ -176,18 +157,21 @@ CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall ${PRODUCT_NAME}.lnk" 
 WriteINIStr "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.URL" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
 ;CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.URL" "URL" "http://peerstreamer.org"
 
-CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${MUI_ICON}" 0
+;CreateDirectory "$DESKTOP\${PRODUCT_PUBLISHER}"
+;CreateShortCut "$DESKTOP\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${MUI_ICON}" 0
+;CreateShortCut "$DESKTOP\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" ""
 
 !insertmacro MUI_STARTMENU_WRITE_END
 ; ///////////////// END CREATING SHORTCUTS ////////////////////////////////// 
 
 ;MessageBox MB_OK "Welcome to NEM 2011 and enjoy the Streaming!"
 SectionEnd
+
 ; ----------------------------------------------------------------------------------
 ; ************************** SECTION FOR UNINSTALLING ******************************
 ; ---------------------------------------------------------------------------------- 
 Section "Uninstall"
-	SetShellVarContext all
+;	SetShellVarContext all
 	Delete "$INSTDIR\uninstall.exe"
 	; remove all the files and folders
 	Delete "$INSTDIR\channels.conf"
@@ -220,11 +204,11 @@ Section "Uninstall"
 	Delete $INSTDIR
 ;	RMDir /r "$INSTDIR"
 ;	RMDir "$INSTDIR"
-;	Delete "$EXEDIR/uninstall.exe"
-;	Delete "$EXEDIR/streamer-ml-monl-chunkstream-static.exe"
-;	Delete "$EXEDIR/chunker_player.exe"
-;	Delete "$EXEDIR/chunker_streamer.exe"
-;	Delete "$EXEDIR"
+	Delete "$EXEDIR\uninstall.exe"
+	Delete "$EXEDIR\streamer-ml-monl-chunkstream-static.exe"
+	Delete "$EXEDIR\chunker_player.exe"
+	Delete "$EXEDIR\chunker_streamer.exe"
+	Delete "$EXEDIR"
 ;	Delete "$EXEDIR/*.exe"
 ;	RMDir /r "$EXEDIR"	
 	RMDir "$INSTDIR"
