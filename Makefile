@@ -215,9 +215,13 @@ endif
 
 rpm: TMPDIR:=$(shell mktemp -d)
 rpm: debian
-	cp $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb $(TMPDIR)
-	cd $(TMPDIR) && alien -r $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb -v --fixperms -k
-	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.i386.rpm .
+	cp package/$(subst PeerStreamer-,peerstreamer_,$(DIR))-1_$(ARCH).deb $(TMPDIR)
+	cd $(TMPDIR) && alien -r $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_$(ARCH).deb -v --fixperms -k
+ifeq ($(ARCH),i386)
+	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.i386.rpm package/
+else
+	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.x86_64.rpm package/
+endif
 	rm -rf $(TMPDIR)
 endif
 
