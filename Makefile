@@ -199,10 +199,19 @@ uninstall:
 
 ifdef LINUX_OS
 debian:
-	fakeroot checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
-
-debian-amd64:
-	fakeroot checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
+	@echo Debian packaging for $(ARCH)
+ifneq (, $(filter $(ARCH),amd64 $(ARCH) i686))
+	rm -rf package && mkdir package
+	cd package && mkdir -p peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH) && curl http://peerstreamer.org/files/release/barepackage.tgz| tar xz -C peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)
+	cd package && sed -i "s/ARCHITECTURE/$(ARCH)/g" peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/DEBIAN/control 
+	cd package && sed -i "s/VERSION/$(subst PeerStreamer-,,$(REV))/g" peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/DEBIAN/control
+	cp -r $(DIR)/* package/peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/opt/peerstreamer
+	cp Installer/Lin/usr/share/pixmaps/eit-napa.svg package/peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/opt/peerstreamer
+	cd package && fakeroot dpkg --build peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)
+	tar -czvf package/$(DIR).tgz $(DIR)	
+else 
+	$(error Architecture not found $(ARCH))
+endif
 
 rpm: TMPDIR:=$(shell mktemp -d)
 rpm: debian
