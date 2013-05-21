@@ -5,6 +5,17 @@ NOGIT := $(shell [ -d .git ] || echo 1)
 REV := $(shell ( [ -d .git ] && git describe --tags --always --dirty 2>/dev/null ) || ( [ -d .git ] && git describe --tags --always 2>/dev/null ) || ( [ -d .git ] && git describe --tags ) || ( [ -d .svn ] && svnversion ) || echo exported)
 DIR := PeerStreamer-$(subst PeerStreamer-,,$(REV))
 
+ARCH:=$(shell uname -m)
+ifeq ($(ARCH),x86_64)
+	ARCH=amd64
+endif
+ifeq  ($(ARCH),i386)
+	ARCH=i386
+endif
+ifeq  ($(ARCH),i686)
+	ARCH=i386
+endif
+
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
   # do something Linux-y
