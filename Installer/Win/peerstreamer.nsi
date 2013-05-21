@@ -157,9 +157,8 @@ CreateShortCut "$SMPROGRAMS\${PRODUCT_PUBLISHER}\Uninstall ${PRODUCT_NAME}.lnk" 
 WriteINIStr "$SMPROGRAMS\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.URL" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
 ;CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.URL" "URL" "http://peerstreamer.org"
 
-;CreateDirectory "$DESKTOP\${PRODUCT_PUBLISHER}"
-;CreateShortCut "$DESKTOP\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${MUI_ICON}" 0
-;CreateShortCut "$DESKTOP\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" ""
+CreateDirectory "$DESKTOP\${PRODUCT_PUBLISHER}"
+CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXECUTABLE}" "" "$INSTDIR\${MUI_ICON}" 0
 
 !insertmacro MUI_STARTMENU_WRITE_END
 ; ///////////////// END CREATING SHORTCUTS ////////////////////////////////// 
