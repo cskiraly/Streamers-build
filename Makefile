@@ -5,6 +5,17 @@ NOGIT := $(shell [ -d .git ] || echo 1)
 REV := $(shell ( [ -d .git ] && git describe --tags --always --dirty 2>/dev/null ) || ( [ -d .git ] && git describe --tags --always 2>/dev/null ) || ( [ -d .git ] && git describe --tags ) || ( [ -d .svn ] && svnversion ) || echo exported)
 DIR := PeerStreamer-$(subst PeerStreamer-,,$(REV))
 
+ARCH:=$(shell uname -m)
+ifeq ($(ARCH),x86_64)
+	ARCH=amd64
+endif
+ifeq  ($(ARCH),i386)
+	ARCH=i386
+endif
+ifeq  ($(ARCH),i686)
+	ARCH=i386
+endif
+
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
   # do something Linux-y
@@ -188,16 +199,29 @@ uninstall:
 
 ifdef LINUX_OS
 debian:
-	fakeroot checkinstall -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
-
-debian-amd64:
-	fakeroot checkinstall --requires=ia32-libs -D --fstrans --install=no --pkgname="peerstreamer" --pkgversion="$(subst PeerStreamer-,,$(REV))" --pkgarch=amd64 --pkglicense="GPLv3" --maintainer='"Csaba Kiraly <info@peerstreamer.org>"' --nodoc --strip=yes --showinstall=no --default --backup=no
+	@echo Debian packaging for $(ARCH)
+ifneq (, $(filter $(ARCH),amd64 $(ARCH) i686))
+	rm -rf package && mkdir package
+	cd package && mkdir -p peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH) && curl http://peerstreamer.org/files/release/barepackage.tgz| tar xz -C peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)
+	cd package && sed -i "s/ARCHITECTURE/$(ARCH)/g" peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/DEBIAN/control 
+	cd package && sed -i "s/VERSION/$(subst PeerStreamer-,,$(REV))/g" peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/DEBIAN/control
+	cp -r $(DIR)/* package/peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/opt/peerstreamer
+	cp Installer/Lin/usr/share/pixmaps/eit-napa.svg package/peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)/opt/peerstreamer
+	cd package && fakeroot dpkg --build peerstreamer_$(subst PeerStreamer-,,$(REV))-1_$(ARCH)
+	tar -czvf package/$(DIR).tgz $(DIR)	
+else 
+	$(error Architecture not found $(ARCH))
+endif
 
 rpm: TMPDIR:=$(shell mktemp -d)
 rpm: debian
-	cp $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb $(TMPDIR)
-	cd $(TMPDIR) && alien -r $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_i386.deb -v --fixperms -k
-	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.i386.rpm .
+	cp package/$(subst PeerStreamer-,peerstreamer_,$(DIR))-1_$(ARCH).deb $(TMPDIR)
+	cd $(TMPDIR) && alien -r $(subst PeerStreamer-,peerstreamer_,$(DIR))-1_$(ARCH).deb -v --fixperms -k
+ifeq ($(ARCH),i386)
+	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.i386.rpm package/
+else
+	mv $(TMPDIR)/$(subst PeerStreamer_,peerstreamer-,$(subst -,_,$(DIR)))-1.x86_64.rpm package/
+endif
 	rm -rf $(TMPDIR)
 endif
 
